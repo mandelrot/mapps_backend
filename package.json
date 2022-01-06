@@ -4,7 +4,8 @@
   "description": "An ERP motor to support the Mandelrot Apps ecosystem.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node main.js",
+    "watch": "nodemon main.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
   },
   "homepage": "https://github.com/mandelrot/mapps_backend#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
