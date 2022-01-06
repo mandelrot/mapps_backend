@@ -3,7 +3,8 @@
 const config = {};
 
 config.server = {
-  port: 3000
+  PORT: 3000, // Change to your needs
+  MSG_PASSPHRASE: 'Your password (spaces allowed) to send msgs from the backend to the apps'
 }
 
 /* END OF YOUR CUSTOMIZATION. 
@@ -12,7 +13,6 @@ YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW HERE */
 
 
 /* If ./config_dev is there we are in DEV environment */
-const fs = require('fs-extra');
 const path = require('path');
 
 const configDev = (() => {
