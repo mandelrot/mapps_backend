@@ -19,7 +19,10 @@
   "homepage": "https://github.com/mandelrot/mapps_backend#readme",
   "dependencies": {
     "colors": "^1.4.0",
-    "fs-extra": "^10.0.0"
+    "express": "^4.17.2",
+    "fs-extra": "^10.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
