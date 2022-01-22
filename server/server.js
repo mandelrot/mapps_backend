@@ -21,24 +21,26 @@ app.use(express.json());
 
 
 
+/* USERS ROUTES (WHERE THEY CONNECT TO INTERACT WITH THE APPS) */
 
 
-/* ROUTES */
-
-app.get('/front', (req, res) => {  // delete
-  // Fake front to test the incoming connections
-  res.sendFile(path.join(__dirname, '..', 'fake-front', 'fake-index.html'))
-});
+// app.get('/:app', (req, res) => { // To be implemented
+//   // send to the CONTROL module
+// })
 
 
+/* END OF USERS ROUTES */
 
-app.get('/files', (req, res) => {
-  // File uploads pending
-});
+
+
+
+
+/* INTERNAL APP ROUTES AND FUNCTIONS */
+
 
 io.on('connection', (socket) => {
   socket.on('msgFromApp', (message) => {
-    console.log (message);
+    // console.log (message);
     // To be implemented: send to CONTROL
   })
 
@@ -52,10 +54,14 @@ io.on('connection', (socket) => {
   })
 });
 
+app.get('/files', (req, res) => {
+  // File uploads pending
+});
 
-// app.get('/:app', (req, res) => { // To be implemented
-//   // send to the CONTROL module
-// })
+
+/* END OF INTERNAL APP ROUTES AND FUNCTIONS */
+
+
 
 
 
