@@ -14,6 +14,10 @@ files.appsInstalled = () => { // Each app should correspond to a folder in the a
   
 }
 
+files.appStructureIsOk = () => {
+
+};
+
 
 
 module.exports = files;

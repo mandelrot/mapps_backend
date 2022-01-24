@@ -12,6 +12,7 @@ config.locations = {
 
 config.server = {
   PORT: 3000, // Change to your needs
+  PORT_BACKEND: 9000,
   MSG_PASSPHRASE: 'Your password (spaces allowed) to send msgs from the backend to the apps'
 };
 
