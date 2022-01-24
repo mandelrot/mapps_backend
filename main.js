@@ -3,8 +3,14 @@ configure ./config/config.js with your own data */
 
 const path = require('path');
 
+const colors = require('colors');
 
-// Communications module
+
+
+
+
+// Servers up: backend (only accesible from inside the server) and public
+require(path.join(__dirname, 'server', 'server-backend.js'));
 require(path.join(__dirname, 'server', 'server.js'));
 
 
@@ -24,7 +30,8 @@ require(path.join(__dirname, 'server', 'server.js'));
 
   Delete: 
     - All the lines marked with a "delete" comment
-    - package.json --> colors
+    - package.json --> colors, and all the "colors" references
     - front-fake folder
+    - admin-index.html: Tailwind CDN (switch to local optimized production version)
 */
 

@@ -15,7 +15,7 @@ const express = require('express'),
 
 // VERY important: if an express app gets a request with a json-type header but a
 // non-json body, depending on the request the app can crash. The next line prevents it:
-app.use((err, req, res, next) => { if (err) { return res.status(400).send(); } }); 
+app.use((err, req, res, next) => { if (err) { return res.sendStatus(400); } }); 
 
 app.use(express.json());
 
@@ -23,46 +23,60 @@ app.use(express.json());
 
 
 
-/* ROUTES */
+/* INTERNAL APP ROUTES AND FUNCTIONS */
 
-app.get('/front', (req, res) => {  // delete
-  // Fake front to test the incoming connections
-  res.sendFile(path.join(__dirname, '..', 'fake-front', 'fake-index.html'))
-});
-
-
-
-app.get('/files', (req, res) => {
-  // File uploads pending
-});
 
 io.on('connection', (socket) => {
   socket.on('msgFromApp', (message) => {
-    console.log (message);
-    // To be implemented: send to CONTROL
-  })
 
-  socket.on('msgFromBackend', (message) => {
-    if (!socket.conn.remoteAddress.includes('127.0.0.1') ||
-        message.appId !== config.server.MSG_PASSPHRASE) { return; }
-    delete message.appId;
-    
-    // To be implemented: handle the operation
-    socket.broadcast.emit('msgFromBackend', message);
-  })
+    // To be implemented: send to CONTROL
+  });
+
+  socket.on('msgFromMain', (message) => {
+
+    // To be implemented: send to CONTROL (it should just be the apps list)
+  });
 });
 
 
-// app.get('/:app', (req, res) => { // To be implemented
-//   // send to the CONTROL module
-// })
+
+app.post('/files', (req, res) => {
+  // File uploads pending
+});
+
+
+/* END OF INTERNAL APP ROUTES AND FUNCTIONS */
 
 
 
 
-app.all('*', (req, res) => { // 404 response to be implemented
-  console.log (('Request en app.all: ' + req.url).red)
-  res.send('404: the resource you are looking for is not there');
+
+/* USERS ROUTES (WHERE THEY CONNECT TO INTERACT WITH THE APPS) */
+app.use(express.static(path.join(__dirname, '..', 'fronts')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'fronts/main.html'));
+});
+
+app.get('/404', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'fronts/404.html'));
+});
+
+app.get('/:app', (req, res) => { // To be implemented
+  // console.log (req.params);
+  // send to CONTROL: if Control doesn't find the app, then redirect to 404
+  res.send(req.params);
+});
+
+
+/* END OF USERS ROUTES */
+
+
+
+
+
+app.all('*', (req, res) => { // Non-get petitions will end up here
+  res.sendStatus(404);
 })
 
 
