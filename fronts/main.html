@@ -8,18 +8,84 @@
   <title>Mandelrot apps</title>
   <script defer src="./js/alpine.min.js"></script>
   <!-- Styles -->
-  <link rel="stylesheet" href="./css/tailwind.css">
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Delete in production -->
+  <!-- <link rel="stylesheet" href="./css/tailwind.css"> -->
   <link rel="stylesheet" href="./css/custom.css">
 </head>
 <body>
 
-  <div class="bg-blue-200">
+  <div id="container"
+    class="max-w-3xl mx-auto px-2"
+    x-data="{checkingApps: true, apps: []}" 
+    x-on:appslist.window="apps = $event.detail.apps"
+    x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps">
 
-    <h2>This will be the general <span class="thick">suite welcome page</span> (root)</h2>
+    <header class="fadein shadow flex items-center mt-1 p-6 text-3xl select-none">
+      MANDELR
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" version="1.1">
+          <circle fill="#990000" cx="13" cy="12" r="12"/>
+      </svg>
+      T APPS
+    </header>
+
+    <main class="py-16">
+
+      <!-- Show while checking apps (waiting for the backend result) -->
+      <template x-if="checkingApps">
+        <svg class="spinner" viewBox="0 0 50 50">
+          <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+      </template> <!-- End of while checking apps -->
+
+
+
+      <!-- List of apps (or empty list) -->
+      <template x-if="!checkingApps">
+
+        <div class="fadein">
+          <h1 class="text-2xl mb-2">Apps list</h1>
+          <p class=" text-gray-400">
+            Click to access.
+          </p>
+
+  
+          <div>
+            <template x-if="!Array.isArray(apps) || apps.length === 0">
+              <div class="text-center bg-gray-100 mt-8 p-4 rounded">
+                No valid app found.
+              </div>
+            </template>
+
+            <template x-if="Array.isArray(apps) && apps.length > 0">
+              <div class="px-4 flex flex-col space-y-8">
+                <template x-for="app in apps" :key="app.appFolder">
+                  <!-- App card -->
+                  <a :href="app.appLink">
+                    <div class="shadow p-5 rounded flex select-none cursor-pointer">
+                      <div class="flex-none">
+                        <img :src="app.appIcon" class="w-16">
+                      </div>
+                      <div class="ml-5">
+                        <div class="font-bold mb-2" x-text="app.appFullName"></div>
+                        <div x-text="app.appDescription"></div>
+                      </div>
+                    </div>
+                  </a>
+                </template>
+              </div>
+            </template>
+
+          </div>
+        </div>
+
+      </template> <!-- End of list of apps (or empty list) -->
+
+    </main>
+
   </div>
   
 
 
-  <script src="./js/general.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 </html>

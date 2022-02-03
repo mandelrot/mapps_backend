@@ -22,10 +22,16 @@ app.use(express.json());
 
 
 
-
 /* INTERNAL APP ROUTES AND FUNCTIONS */
 
+// The admin can ONLY use the admin window via Electron, can't connect from anywhere else
+module.exports = {
+  msgFromAdmin: async function (message) {
+    return await control.msgFromAdmin (message);
+  }
+}
 
+// Socket connections with the outside world
 io.on('connection', (socket) => {
   socket.on('msgFromApp', (message) => {
 
@@ -34,7 +40,18 @@ io.on('connection', (socket) => {
 
   socket.on('msgFromMain', (message) => {
 
-    // To be implemented: send to CONTROL (it should just be the apps list)
+    // To be implemented: send to CONTROL
+  });
+
+  socket.on('msgFromControl', (message) => {
+    if (!socket.conn.remoteAddress.includes('127.0.0.1') ||
+        message.pass !== config.PASSPHRASE) {
+      return socket.disconnect();
+    }
+    const channel = message.app;
+    delete message.pass;
+    delete message.app;
+    socket.broadcast.emit(channel, message);
   });
 });
 
@@ -46,7 +63,6 @@ app.post('/files', (req, res) => {
 
 
 /* END OF INTERNAL APP ROUTES AND FUNCTIONS */
-
 
 
 
@@ -78,7 +94,6 @@ app.get('/:app', (req, res) => { // To be implemented
 app.all('*', (req, res) => { // Non-get petitions will end up here
   res.sendStatus(404);
 })
-
 
 
 
