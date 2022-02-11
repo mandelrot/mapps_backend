@@ -16,9 +16,6 @@ body {
   font-family: 'Encode regular', sans-serif;
 }
 
-.thick {
-  font-family: 'Encode bold', sans-serif;
-}
 
 
 
@@ -29,13 +26,67 @@ body {
 }
 .fadein {
   animation-name: fadein;
-  animation-duration: .8s;
+  animation-duration: .5s;
 }
-@keyframes fadeout {
-  0%   {opacity: 1;}
-  100% {opacity: 0;}
+
+
+
+
+/* Rotating spinner loader icon */
+.spinner {
+  -webkit-animation: rotate 2s linear infinite;
+          animation: rotate 2s linear infinite;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  width: 50px;
+  height: 50px;
 }
-.fadeout {
-  animation-name: fadeout;
-  animation-duration: .8s;
+.spinner .path {
+  stroke: #c7bdbd;
+  stroke-linecap: round;
+  -webkit-animation: dash 1.5s ease-in-out infinite;
+          animation: dash 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

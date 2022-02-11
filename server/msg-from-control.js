@@ -14,11 +14,11 @@ const socket = io(`http://127.0.0.1:${config.server.PORT}`);
 
 
 
-const msgFromBackend = {};
+const msgFromControl = {};
 
-msgFromBackend.send = (msgObject) => {
-  msgObject.appId = config.server.MSG_PASSPHRASE;
-  socket.emit('msgFromBackend', msgObject);
+msgFromControl.send = (msgObject) => {
+  msgObject.pass = config.PASSPHRASE;
+  socket.emit('msgFromControl', msgObject);
 };
 
-module.exports = msgFromBackend;
+module.exports = msgFromControl;
