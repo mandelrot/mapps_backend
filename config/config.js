@@ -3,7 +3,7 @@ const config = {};
 
 
 /* THE FOLLOWING BLOCK IS MEANT TO BE CUSTOMIZED BY YOU. 
-PLEASE DO NOT FORGET TO FOLLOW THE PASSPHRASE INSTRUCTIONS */
+PLEASE READ THE COMMENTS AND FOLLOW THE INSTRUCTIONS */
 
   config.locations = {
     appsFolderRouteFromMainDirectory: ['..', '..', 'APPS'],
@@ -17,6 +17,8 @@ PLEASE DO NOT FORGET TO FOLLOW THE PASSPHRASE INSTRUCTIONS */
 
   config.server = {
     PORT: 3000, // Change to your needs
+      // VERY IMPORTANT - PLEASE GET SURE THE PORT HERE IS THE SAME THAN THE PORT AT
+      // fronts/js/main.js  -->  Both variables must match so the main page can work!
   };
 
 
@@ -51,14 +53,14 @@ Before compiling the app to make a real production software customized just for 
 you should change the PASSPHRASE variable to something only you know. And right after 
 doing that, you should change it again and save (to erase all trace of what it was).
 
-The frontend apps will use the PASSPHRASE variable to store their encrypted information.
-This means your database files will be linked to it: the information within them will
-not be accesible from any context outside the suite. If someone steals your files, since
-they will not be able to read them (and they don't have the encrypted user passwords), 
-your critical information will have a reasonable protection. Absolute security doesn't 
-exist of course, but something is better than nothing.
+The frontend apps will use the PASSPHRASE variable to store their encrypted information
+(example: passwords). If someone steals your database files they still could not see
+the encripted fields. The absolute security doesn't exist of course, but this adds
+a protection layer.
 
-Side note: you should keep a copy of your customized PASSPHRASE somewhere else. In case
-something happens to your software and you need to re-compile the basic suite app, you 
-can reuse your PASSPHRASE again so you will always be able to have things working again.
+Anyway, you should keep your PASSPHRASE somewhere safe. In case something happens and
+you have to re-compile your suite distribution (and then copy the apps folders with
+their databases inside them), you will need to use the same PASSPHRASE so your suite
+can decrypt those protected fields and work with them. Remember: the PASSPHRASE is
+the key to access your data. 
 */

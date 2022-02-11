@@ -27,20 +27,20 @@ app.use(express.json());
 // The admin can ONLY use the admin window via Electron, can't connect from anywhere else
 module.exports = {
   msgFromAdmin: async function (message) {
-    return await control.msgFromAdmin (message);
+    return await control.msgFromAdmin(message);
   }
 }
 
 // Socket connections with the outside world
 io.on('connection', (socket) => {
-  socket.on('msgFromApp', (message) => {
+  socket.on('msgFromApp', async (message) => {
 
     // To be implemented: send to CONTROL
   });
 
-  socket.on('msgFromMain', (message) => {
-
-    // To be implemented: send to CONTROL
+  socket.on('msgFromMain', async (message, responseFunction) => {
+    response = await control.msgFromMain(message);
+    responseFunction(response);
   });
 
   socket.on('msgFromControl', (message) => {

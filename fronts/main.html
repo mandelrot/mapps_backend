@@ -16,19 +16,32 @@
 
   <div id="container"
     class="max-w-3xl mx-auto px-2"
-    x-data="{checkingApps: true, apps: []}" 
+    x-data="{msgOk: false, msgError: false, checkingApps: true, apps: []}" 
     x-on:appslist.window="apps = $event.detail.apps"
-    x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps">
+    x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps"
+    x-on:msg.window="msgOk = $event.detail.msgOk || false; msgError = $event.detail.msgError || false">
 
-    <header class="fadein shadow flex items-center mt-1 p-6 text-3xl select-none">
-      MANDELR
-      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" version="1.1">
-          <circle fill="#990000" cx="13" cy="12" r="12"/>
-      </svg>
-      T APPS
+
+    <header class="fadein shadow flex items-center mt-1 pl-2 sm:pl-6 pt-6 pb-6 text-3xl select-none">
+      <div class="flex items-center mr-2">
+        MANDELR
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" version="1.1">
+            <circle fill="#990000" cx="13" cy="12" r="12"/>
+        </svg>
+        T 
+      </div>
+      <div>APPS</div>
     </header>
 
     <main class="py-16">
+
+      <template x-if="msgOk">
+        <div class="fadein mb-12 rounded p-4 bg-gray-100 text-red-800 text-[1.1em]" x-text="msgOk"></div>
+      </template>
+      <template x-if="msgError">
+        <div class="fadein mb-12 rounded p-4 bg-red-200 text-red-800 text-[1.1em]" x-text="msgError"></div>
+      </template>
+
 
       <!-- Show while checking apps (waiting for the backend result) -->
       <template x-if="checkingApps">
@@ -85,7 +98,8 @@
   </div>
   
 
-
+  
+  <script src="./js/socket.io.min.js"></script>
   <script src="./js/main.js"></script>
 </body>
 </html>

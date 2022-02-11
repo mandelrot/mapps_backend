@@ -15,11 +15,11 @@
 <body>
 
   <div id="container" 
-        x-data="{msgOk: false, msgError: false, checkingApps: true, apps: []}" 
-        class="max-w-3xl mx-auto px-2"
-        x-on:appslist.window="apps = $event.detail.apps"
-        x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps"
-        x-on:msg.window="msgOk = $event.detail.msgOk || false; msgError = $event.detail.msgError || false">
+    class="max-w-3xl mx-auto px-2"
+    x-data="{msgOk: false, msgError: false, checkingApps: true, apps: []}" 
+    x-on:appslist.window="apps = $event.detail.apps"
+    x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps"
+    x-on:msg.window="msgOk = $event.detail.msgOk || false; msgError = $event.detail.msgError || false">
 
 
     <header class="fadein shadow sm:flex sm:items-center mt-1 p-6 text-3xl select-none">

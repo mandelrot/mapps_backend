@@ -34,7 +34,7 @@ const createAdminWindow = () => {
     }
   });
   // adminWindow.maximize(); // to be implemented: uncomment in production
-  adminWindow.webContents.openDevTools(); // delete in production
+  // adminWindow.webContents.openDevTools(); // delete in production
   adminWindow.once('ready-to-show', () => {
     adminWindow.show();
   });
@@ -75,6 +75,8 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
   Backend apps logs (errors registry)
 
   Error messages - language packs
+
+  Ensure the app folders can't be named "admin" or "main"!!
 
   Delete: 
     - All the lines marked with a "delete" comment
