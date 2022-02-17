@@ -62,7 +62,7 @@ function waitingMode() {
     const checkboxApps = document.getElementsByClassName('checkboxApp');
     const updatedApps = []
     for (const app of checkboxApps) {
-      updatedApps.push({appFolder: app.id, appEnabled: app.checked})
+      updatedApps.push({appFolder: app.id, appFullName: app.name, appEnabled: app.checked})
     }
     
     sendToBackend('updateAppsStatus', { apps: updatedApps })

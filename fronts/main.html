@@ -73,7 +73,7 @@
               <div class="px-4 flex flex-col space-y-8">
                 <template x-for="app in apps" :key="app.appFolder">
                   <!-- App card -->
-                  <a :href="app.appLink">
+                  <a :href="app.appLink" target="_blank">
                     <div class="shadow p-5 rounded flex select-none cursor-pointer">
                       <div class="flex-none">
                         <img :src="app.appIcon" class="w-16">

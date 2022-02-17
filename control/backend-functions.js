@@ -9,42 +9,27 @@ const config = require(path.join(__dirname, '..', 'config', 'config.js')),
 
 
 
-
-
-let adminPassword = false;
-
-
-/* ENCRYPTED FILE OPERATIONS */
-let encryptedFileContent = false;
-
-const readEncryptedFile = () => {
-  // To be implemented: read (sync) the file when app starts.
-  // This file should contain (encrypted) one of these two: 
-  //   - If no admin is created: { pass: the same pass than the config pass }
-  //   - If admin is alredy created: { pass, adminPassWord }
-}
-const checkEncryptedFileIntegrity = () => {
-  // To be implemented: decrypt encryptedFileContent, then check whether it contains the config 
-}
-const writeEncryptedFile = () => {
-  // To be implemented: write (sync) the file when the new admin is created
-}
-
-/* END OF ENCRYPTED FILE OPERATIONS */
-
-
-
 const backend = {};
 
-backend.checkOrCreateAdmin = async (adminPassword) => {
 
 
-  if (adminPassword) { return { result: false, error: 'An admin password is already registered.' } }
+backend.checkAppsList = async () => {
+  return await files.getAppsInstalled();
 }
 
-
-backend.makeAppsList = (json) => {
-
+backend.updateAppsList = async (updatedApps) => {
+  const appsInstalled = await backend.checkAppsList();
+  if (appsInstalled.msgError) { return { msgError: appsInstalled.msgError }; }
+  const apps = JSON.parse(JSON.stringify(appsInstalled.result));
+  for (const updatedApp of updatedApps) {
+    for (const app of apps) {
+      if (app.appFolder === updatedApp.appFolder &&
+          app.appFullName === updatedApp.appFullName) { 
+        app.appEnabled = updatedApp.appEnabled; 
+      }
+    }
+  }
+  return await files.updateAppsInstalled(apps);
 }
 
 
