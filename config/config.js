@@ -6,10 +6,9 @@ const config = {};
 PLEASE READ THE COMMENTS AND FOLLOW THE INSTRUCTIONS */
 
   config.locations = {
-    appsFolderRouteFromMainDirectory: ['..', '..', 'APPS'],
+    appsFolderRouteFromMainDirectory: ['..', '..', 'APPS']
         // No need to change, in the production Electron app this will place the APPS
         // folder in the root app directory (where the executable is)
-    encryptedFile: 'system.enc' // You could change this if you want to, but there's no need
   };
 
   config.PASSPHRASE = 'VERY IMPORTANT - YOU SHOULD CUSTOMIZE THIS TEXT BEFORE COMPILATION';

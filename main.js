@@ -10,7 +10,6 @@ const colors = require('colors');
 
 
 /* Servers up: backend (only accesible from inside the server) and public */
-// const serverBackend = require(path.join(__dirname, 'server', 'server-backend.js')); // delete
 const server = require(path.join(__dirname, 'server', 'server.js'));
 
 
@@ -74,15 +73,18 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
 
   Backend apps logs (errors registry)
 
-  Error messages - language packs
+  Error messages 
 
   Ensure the app folders can't be named "admin" or "main"!!
+
+
+  Function to ensure the frontend apps struture are ok
+
 
   Delete: 
     - All the lines marked with a "delete" comment
     - package.json --> colors, and all the "colors" references
-    - front-fake folder
-    - admin-index.html: Tailwind CDN (switch to local optimized production version)
+    - admin-index-404.html: Tailwind CDN (switch to local optimized production version)
 */
 
 

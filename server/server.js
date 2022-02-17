@@ -69,6 +69,7 @@ app.post('/files', (req, res) => {
 
 /* USERS ROUTES (WHERE THEY CONNECT TO INTERACT WITH THE APPS) */
 app.use(express.static(path.join(__dirname, '..', 'fronts')));
+app.use(express.static(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, '..')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'fronts/main.html'));
