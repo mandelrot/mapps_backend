@@ -32,6 +32,7 @@ control.msgFromAdmin = async (message) => {
       const updatedList = await backend.updateAppsList(message.data.apps);
       response.data.apps = updatedList.result || [];
       if (updatedList.msgError) { response.data.msgError = updatedList.msgError; }
+      control.msgToMain('reload');
       break;
   }
   return response;
