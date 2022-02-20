@@ -69,7 +69,6 @@ app.post('/files', (req, res) => {
 
 /* USERS ROUTES (WHERE THEY CONNECT TO INTERACT WITH THE APPS) */
 app.use(express.static(path.join(__dirname, '..', 'fronts')));
-app.use(express.static(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, '..')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'fronts/main.html'));
@@ -79,10 +78,36 @@ app.get('/404', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'fronts/404.html'));
 });
 
-app.get('/:app', (req, res) => { // To be implemented
-  // console.log (req.params);
-  // send to CONTROL: if Control doesn't find the app, then redirect to 404
-  res.send(req.params);
+app.get('/msgFromServer', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'fronts/msgfromserver.html'));
+});
+
+
+app.get('/:appFolder', async (req, res)=> {
+  const appChecked = await control.checkApp(req.params.appFolder);
+  if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
+  if (appChecked.result) {
+    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', 'index.html'));
+  }
+  res.redirect('/404');
+})
+
+app.get('/:appFolder/*', async (req, res) => { // To be implemented
+  const appChecked = await control.checkApp(req.params.appFolder);
+  if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
+  // if (!appChecked.result && !(req.params['0'].includes('backend-static'))) {
+  if (!appChecked.result) {
+    return res.redirect('/404');
+  }
+  if (appChecked.result === 'managedByFrontendApp' && !(req.params['0'].includes('static'))) {
+    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', 'index.html'));
+  }
+  const fileExists = await control.checkAppFile ([req.params.appFolder, 'app'].concat(req.params['0'].split('/')));
+  if (fileExists) {
+    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', ...req.params['0'].split('/')));
+  } else {
+    return res.redirect('/404');
+  }
 });
 
 

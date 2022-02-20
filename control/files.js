@@ -44,7 +44,6 @@ async function checkBasicAppsStructure () { // During execution
       This is the error triggered by the system:
       
       ${error}`;
-      console.log (msgError);
     return { msgError };
   }
 }
@@ -98,32 +97,46 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
     let filesInInfoFolder = [];
     let eachMetadata = {}; // From the app.info file
     let routeToAppIcon = '';
+    let routeToAdminIcon = '';
     let iconfound = false;
+    let backendStaticDir = 'backend-static'; // Will be created inside each frontend app "app" subfolder, to store app icon
+    let backendStaticPath = '';
+    let appRoutingType; // By default, could be "managedByFrontendApp"
     for (const validApp of validApps) {
       try {
         routeToIndexHtml = path.join(routeToAppsFolder, validApp, 'app', 'index.html');
         indexHtmlExists = await fs.pathExists(routeToIndexHtml);
-        webPathToIndexHtml = `../APPS/${validApp}/app/index.html`;
+        webPathToIndexHtml = `/${validApp}`;
         infoFolder = path.join(routeToAppsFolder, validApp, 'backend', 'info');
         eachMetadata = await fs.readJSON(path.join(infoFolder, 'app-data.json'));
         filesInInfoFolder = await fs.readdir(infoFolder);
         iconfound = false;
+        appRoutingType = 'staticFiles';
         for (const fileInInfoFolder of filesInInfoFolder) {
           if (fileInInfoFolder.includes('app-icon')) { iconfound = fileInInfoFolder; }
         }
+        // Ensure frontend icon will be there
+        backendStaticPath = path.join(routeToAppsFolder, validApp, 'app', 'backend-static');
+        await fs.ensureDir(backendStaticPath);
         if (iconfound) { 
-          routeToAppIcon = `../APPS/${validApp}/backend/info/${iconfound}`;
+          await fs.copyFile(path.join(infoFolder, iconfound), path.join(backendStaticPath, iconfound));
+          routeToAppIcon = `/${validApp}/${backendStaticDir}/${iconfound}`;
+          routeToAdminIcon = path.join(infoFolder, iconfound);
         } else { 
-          await fs.copyFile(defaultIconRoute, path.join(infoFolder, 'icon-generic-app.png'));
-          routeToAppIcon = `../APPS/${validApp}/backend/info/icon-generic-app.png`;
+          await fs.copyFile(defaultIconRoute, path.join(backendStaticPath, 'icon-generic-app.png'));
+          routeToAppIcon = `/${validApp}/${backendStaticDir}/icon-generic-app.png`;
+          routeToAdminIcon = defaultIconRoute;
         }
+        if (eachMetadata.appRoutingType === 'managedByFrontendApp') { appRoutingType = eachMetadata.appRoutingType; }
         eachValidApp = {
           appFolder: validApp,
           appFullName: eachMetadata.appFullName || false,
           appIcon: routeToAppIcon,
+          appAdminIcon: routeToAdminIcon,
           appEnabled: false,
           appLink: indexHtmlExists ? webPathToIndexHtml : false,
-          appDescription: eachMetadata.appDescription || ''
+          appDescription: eachMetadata.appDescription || '',
+          appRoutingType
         }
         if (!eachValidApp.appFullName || !eachValidApp.appLink) { throw error; } 
         // Sync enabled state with appState file
@@ -166,6 +179,28 @@ files.updateAppsInstalled = async (updatedApps) => {
   }
 }
 
+
+
+
+files.getAppsState = async () => {
+  try {
+    appsState = JSON.parse(encryption.decipher(await (await fs.readFile(routeToAppsStateFile)).toString()));
+    return { result: appsState };
+  } catch (error) {
+    const msgError = `An error has happened when reading the apps state file (to check whether the app you want to use is installed in the server).
+
+      This is the error triggered by the system:
+      
+      ${error}`;
+    return { msgError };
+  }
+}
+
+
+
+files.checkAppFile = async (routeArray) => {
+  return await fs.pathExists(path.join(routeToAppsFolder, ...routeArray));
+}
 
 
 

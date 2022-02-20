@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./static/icon.png" type="image/png">
+  <title>Mandelrot apps: message from server</title>
+  <!-- Styles -->
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Delete in production -->
+  <!-- <link rel="stylesheet" href="./css/tailwind.css"> -->
+  <link rel="stylesheet" href="./css/custom.css">
+</head>
+<body>
+
+  <div class="fadein max-w-3xl mx-auto px-2 select-none">
+
+
+    <header class="shadow flex items-center mt-1 pl-2 sm:pl-6 pt-6 pb-6 text-3xl">
+      <div class="flex items-center mr-2">
+        MANDELR
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" version="1.1">
+            <circle fill="#990000" cx="13" cy="12" r="12"/>
+        </svg>
+        T 
+      </div>
+      <div>APPS</div>
+    </header>
+
+
+    
+
+    <div class="mt-44 text-center text-xl">
+      A message has been sent from the server:
+    </div>
+    <div id="msg" class="mt-12 text-xl text-red-800"></div>
+    
+  </div>
+
+
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(document.location.search);
+      const msg = params.get("msg");
+      document.getElementById('msg').innerText = msg;
+    }
+  </script>
+  
+</body>
+</html>

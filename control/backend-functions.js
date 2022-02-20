@@ -33,6 +33,21 @@ backend.updateAppsList = async (updatedApps) => {
 }
 
 
+backend.checkAppInAppsState = async (appFolder) => { // Returns appRoutingType or msgError
+  const appsState = await files.getAppsState();
+  if (appsState.msgError) { return { msgError: appsState.msgError }; }
+  const apps = appsState.result;
+  const app = apps.find( app => app.appFolder === appFolder && app.appEnabled );
+  if (app) {
+    return { result: (app.appRoutingType || 'staticFiles') };
+  } else {
+    return { result: false };
+  }
+}
+
+backend.checkAppFile = async (routeArray) => {
+  return await files.checkAppFile(routeArray);
+}
 
 
 
