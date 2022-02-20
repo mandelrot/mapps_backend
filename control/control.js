@@ -25,6 +25,11 @@ control.msgFromAdmin = async (message) => {
   switch (message.action) {
     case 'checkAppsList':
       const backendList = await backend.checkAppsList();
+      for (const backendApp of backendList.result) { // Remove some not needed info
+        delete backendApp.appIcon;
+        delete backendApp.appLink;
+        delete backendApp.appRoutingType;
+      }
       response.data.apps = backendList.result || []; 
       if (backendList.msgError) { response.data.msgError = backendList.msgError; }
       break;
@@ -66,7 +71,11 @@ control.msgFromMain = async (message) => {
     case 'checkAppsList':
       const backendList = await backend.checkAppsList();
       response.data.apps = backendList.result.filter(app => app.appEnabled) || []; 
-      for (const filteredApp of response.data.apps) { delete filteredApp.appEnabled; }
+      for (const filteredApp of response.data.apps) { 
+        delete filteredApp.appAdminIcon;
+        delete filteredApp.appEnabled; 
+        delete filteredApp.appRoutingType;
+      }
       if (backendList.msgError) { response.data.msgError = backendList.msgError; }
       break;
   }
@@ -84,6 +93,19 @@ control.msgToMain = (action, msg) => {
   msgFromControl.send(messageObject);
 }
 /* END OF MAIN FRONTS ZONE */
+
+
+
+
+/* CHECKING FUNCTIONS */
+control.checkApp = async (appFolder) => {
+  return await backend.checkAppInAppsState(appFolder);
+}
+
+control.checkAppFile = async (routeArray) => {
+  return await backend.checkAppFile(routeArray);
+}
+/* END OF CHECKING FUNCTIONS */
 
 
 
