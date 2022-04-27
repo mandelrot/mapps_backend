@@ -18,7 +18,11 @@ const server = require(path.join(__dirname, 'server', 'server.js'));
 const { app, BrowserWindow, ipcMain } = require('electron');
 let adminWindow;
 
-// const createFakeWindow = () => { const fakeWindow = new BrowserWindow(); } // Delete in production, just for tests
+app.disableHardwareAcceleration(); // There is an "ugly" problem with some Chromium versions,
+  // they come with the WebGL disabled by default (and Electron uses hardware acceleration by
+  // default); and this may cause an error message in console when the app window is open for
+  // a while. The only window we need here is the admin window and it quite simple, so we will
+  // avoid the problem this way and the app performance difference won't be even noticed.
 
 const createAdminWindow = () => {
   adminWindow = new BrowserWindow({
@@ -65,21 +69,7 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
 
 /* PENDING
    =======
-
-  server/server.js:
-    - Handle apps request --> send to CONTROL (who will look for the app folder, render it and load the functions)
-    - Handle 404 response
-
-
-  Backend apps logs (errors registry)
-
-  Error messages 
-
-  Ensure the app folders can't be named "admin" or "main"!!
-
-
-  Function to ensure the frontend apps struture are ok
-
+  pouchDB module
 
   Delete: 
     - All the lines marked with a "delete" comment

@@ -1,6 +1,7 @@
 const path = require('path');
 
-const msgFromControl = require(path.join(__dirname, '..', 'server', 'msg-from-control.js')),
+const config = require(path.join(__dirname, '..', 'config', 'config.js')),
+      msgFromControl = require(path.join(__dirname, '..', 'server', 'msg-from-control.js')),
       backend = require(path.join(__dirname, 'backend-functions.js'));
 
 const colors = require('colors'), // delete
@@ -18,6 +19,7 @@ control.msgFromAdmin = async (message) => {
   const response = {
     app: 'control', // Not used, just to keep the communications standard
     user: 'control', // not used
+    to: 'admin', // not used
     action: message.action, // not used
     data: { apps: [] }
   }
@@ -25,7 +27,7 @@ control.msgFromAdmin = async (message) => {
   switch (message.action) {
     case 'checkAppsList':
       const backendList = await backend.checkAppsList();
-      for (const backendApp of backendList.result) { // Remove some not needed info
+      for (const backendApp of (backendList.result || [])) { // Remove some not needed info
         delete backendApp.appIcon;
         delete backendApp.appLink;
         delete backendApp.appRoutingType;
@@ -46,8 +48,9 @@ control.msgFromAdmin = async (message) => {
 control.msgToAdmin = (action, msg) => {
   if (action !== 'reload' && action !== 'msg') { return; } // Everything else is forbidden
   const messageObject = {
-    app: 'admin', // Not used, just to keep the communications format
-    user: 'admin', // Not used
+    app: 'control', // Not used, just to keep the communications format
+    user: 'control', // Not used
+    to: 'admin', // not used
     action,
     data: { msg }
   }
@@ -63,6 +66,7 @@ control.msgFromMain = async (message) => {
   const response = {
     app: 'control', // Not used, just to keep the communications standard
     user: 'control', // not used
+    to: 'main', // not used
     action: message.action, // not used
     data: {apps: []}
   }
@@ -70,7 +74,8 @@ control.msgFromMain = async (message) => {
   switch (message.action) {
     case 'checkAppsList':
       const backendList = await backend.checkAppsList();
-      response.data.apps = backendList.result.filter(app => app.appEnabled) || []; 
+      const blist = backendList.result || [];
+      response.data.apps = blist.filter(app => app.appEnabled); 
       for (const filteredApp of response.data.apps) { 
         delete filteredApp.appAdminIcon;
         delete filteredApp.appEnabled; 
@@ -85,14 +90,73 @@ control.msgFromMain = async (message) => {
 control.msgToMain = (action, msg) => {
   if (action !== 'reload' && action !== 'msg') { return; } // Everything else is forbidden
   const messageObject = {
-    app: 'main', // Not used, just to keep the communications format
-    user: 'main', // Not used
+    app: 'control', // Not used, just to keep the communications format
+    user: 'control', // Not used
+    to: 'main',
     action,
     data: { msg }
   }
   msgFromControl.send(messageObject);
 }
 /* END OF MAIN FRONTS ZONE */
+
+
+
+/* FRONT APPS FRONT ZONE - main.html*/
+/* 
+To make frontend development easier, this is the communication standard suggested among the front apps:
+  Request object: {
+    app: 'Who makes the request (the app folder name)',
+    user: 'User token (when needed)', 
+    to: 'Who is the request targeted to (the app folder name)',
+    action: 'functionToInvoke', 
+    data: { 
+      params: ['param1', 'param2'] // Will be passed to the invoked function, the content of the array can be anything
+    }
+  }
+  Response object: { // The object to return should have only one of the two messages
+    msgOk: 'The actual response', // Any type: string, object or whatever
+    msgError: 'Some error message the frontend app will display'
+  }
+*/
+control.msgFromApp = async (messageString) => {
+  try {
+    // Format checks
+    const message = JSON.parse(messageString);
+    const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
+    for (const requiredField of ['app', 'user', 'to', 'action', 'data']) {
+      if (!Object.keys(message).includes(requiredField)) {
+        throw formatErrorMsg;
+      }
+    }
+    if (!message.data.params || !Array.isArray(message.data.params)) { throw formatErrorMsg; }
+    // The targeted app must be present and enabled
+    if (!await backend.isAppEnabled(message.to)) { return; }
+    // Finding the right file to require, it should contain the specified function
+    const file = message.app === message.to ? 'internal.js' : 'external.js';
+    const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
+    // Execute the function said in "action", passing the "data --> params" object as argument
+    const whatTargetedFunctionReturns = await functions[message.action](...message.data.params);
+    // return what the function returns
+    return whatTargetedFunctionReturns;
+  } catch (error) {
+    // return msgError
+    const msgError= `Your action has invoked another app in the `
+    console.log ('Salta el error:')
+    console.log (error);
+  }
+}
+
+control.msgToApp = (action, msg) => {
+  // This should be only reload app, reload data or logout
+}
+/* END OF FRONT APPS FRONTS ZONE */
+
+
+
+
+
+
 
 
 
