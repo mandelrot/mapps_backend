@@ -69,12 +69,15 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
 
 /* PENDING
    =======
-  pouchDB module
+  FILES
 
   Delete: 
     - All the lines marked with a "delete" comment
     - package.json --> colors, and all the "colors" references
     - admin-index-404.html: Tailwind CDN (switch to local optimized production version)
+    - Check "pending" comments
+    - Check if "request-ip" package can be safely deleted
+    - See which elements in the frontend structure are not needed to check (should not be required)
 */
 
 
