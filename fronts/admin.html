@@ -37,10 +37,16 @@
     <main class="py-16">
 
       <template x-if="msgOk">
-        <div class="fadein mb-12 rounded p-4 bg-gray-100 text-red-800 text-[1.1em]" x-text="msgOk"></div>
+        <div 
+          class="fadein mb-12 rounded p-4 bg-gray-100 text-red-800 text-[1.1em]" 
+          style="white-space: pre-wrap"
+          x-text="msgOk"></div>
       </template>
       <template x-if="msgError">
-        <div class="fadein mb-12 rounded p-4 bg-red-200 text-red-800 text-[1.1em]" x-text="msgError"></div>
+        <div 
+          class="fadein mb-12 rounded p-4 bg-red-200 text-red-800 text-[1.1em]" 
+          style="white-space: pre-wrap"
+          x-text="msgError"></div>
       </template>
 
 

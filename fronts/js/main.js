@@ -15,13 +15,14 @@ function sendToBackend(action, data) {
   const message = { // This object has this structure just to keep the standard, even with unused fields
     app: 'main',
     user: 'main',
+    to: 'control', // not used
     action,
     data
   };
   socket.emit('msgFromMain', message, (response) => {
     const apps = response.data.apps ? response.data.apps : [];
-      if (response.data.msg) {
-        window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: response.data.msg.msgOk, msgError: response.data.msg.msgError } }));
+      if (response.data.msgOk || response.data.msgError) {
+        window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: response.data.msgOk || false, msgError: response.data.msgError || false } }));
       }
       // Switching from waiting mode (see below) to working again:
       window.dispatchEvent(new CustomEvent('appslist', { detail: { apps } }));
@@ -35,8 +36,8 @@ socket.on('main', (message) => {
   if (message.action === 'reload') {
     return checkAppsList ();
   }
-  if (message.action === 'msg' && message.data && message.data.msg) {
-    window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: message.data.msg.msgOk, msgError: message.data.msg.msgError } }));
+  if (message.action === 'msg' && message.data && (message.data.msgOk || message.data.msgError)) {
+    window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: message.data.msgOk || false, msgError: message.data.msgError || false } }));
   }
 })
 /* END OF COMMUNICATIONS */
@@ -46,8 +47,7 @@ socket.on('main', (message) => {
 /* DISPLAY FUNCTIONS */
 function waitingMode() {
   window.dispatchEvent(new CustomEvent('updatecheckingapps', { detail: {checkingApps: true} }));
-  window.dispatchEvent(new CustomEvent('msgok', { detail: { msgOk: false } }));
-  window.dispatchEvent(new CustomEvent('msgerror', { detail: { msgError: false } }));
+  window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: false, msgError: false } }));
 }
 /* END OF DISPLAY FUNCTIONS */
 

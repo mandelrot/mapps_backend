@@ -4,8 +4,12 @@ The "backend fronts" (admin page and suite entry point) need a few functions too
 */
 
 const path = require('path');
-const config = require(path.join(__dirname, '..', 'config', 'config.js')),
-      files = require(path.join(__dirname, 'files.js'));
+const files = require(path.join(__dirname, 'files.js'));
+
+const colors = require('colors'); // delete
+
+
+let appsStateInMemory = false;
 
 
 
@@ -14,13 +18,22 @@ const backend = {};
 
 
 backend.checkAppsList = async () => {
-  return await files.getAppsInstalled();
+  const appsInstalled = await files.getAppsInstalled();
+  if (appsInstalled.result && !appsInstalled.msgError) {
+    appsStateInMemory = JSON.parse(JSON.stringify(appsInstalled.result));
+  } else {
+    appsInstalled = false;
+  }
+  return appsInstalled;
 }
 
 backend.updateAppsList = async (updatedApps) => {
   const appsInstalled = await backend.checkAppsList();
-  if (appsInstalled.msgError) { return { msgError: appsInstalled.msgError }; }
-  const apps = JSON.parse(JSON.stringify(appsInstalled.result));
+  if (appsInstalled.msgError) { 
+    appsStateInMemory = false;
+    return { msgError: appsInstalled.msgError }; 
+  }
+  const apps = JSON.parse(JSON.stringify(appsInstalled.result || []));
   for (const updatedApp of updatedApps) {
     for (const app of apps) {
       if (app.appFolder === updatedApp.appFolder &&
@@ -29,14 +42,30 @@ backend.updateAppsList = async (updatedApps) => {
       }
     }
   }
+  appsStateInMemory = JSON.parse(JSON.stringify(apps));
   return await files.updateAppsInstalled(apps);
 }
 
+backend.getEnabledAppsList = async () => {
+  let appsState;
+  if (appsStateInMemory) {
+    appsState = { result: appsStateInMemory };
+  } else {
+    appsState = await files.getAppsState();
+    appsStateInMemory = (appsState.result && !appsState.msgError) ? appsState.result : false;
+  }
+  if (appsState.msgError) { return { msgError: appsState.msgError }; }
+  return appsState.result;
+}
+
+backend.isAppEnabled = async (appFolder) => {
+  const apps = await backend.getEnabledAppsList();
+  const app = apps.find( app => app.appFolder === appFolder && app.appEnabled );
+  return app ? true : false;
+}
 
 backend.checkAppInAppsState = async (appFolder) => { // Returns appRoutingType or msgError
-  const appsState = await files.getAppsState();
-  if (appsState.msgError) { return { msgError: appsState.msgError }; }
-  const apps = appsState.result;
+  const apps = await backend.getEnabledAppsList();
   const app = apps.find( app => app.appFolder === appFolder && app.appEnabled );
   if (app) {
     return { result: (app.appRoutingType || 'staticFiles') };
@@ -48,6 +77,7 @@ backend.checkAppInAppsState = async (appFolder) => { // Returns appRoutingType o
 backend.checkAppFile = async (routeArray) => {
   return await files.checkAppFile(routeArray);
 }
+
 
 
 

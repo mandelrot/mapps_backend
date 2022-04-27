@@ -1,4 +1,5 @@
 const colors = require('colors'); // delete
+const util = require('util');
 
 const path = require('path');
 const config = require(path.join(__dirname, '..', 'config', 'config.js')),
@@ -33,9 +34,9 @@ module.exports = {
 
 // Socket connections with the outside world
 io.on('connection', (socket) => {
-  socket.on('msgFromApp', async (message) => {
-
-    // To be implemented: send to CONTROL
+  socket.on('msgFromApp', async (message, responseFunction) => {
+    response = await control.msgFromApp(message);
+    responseFunction(response);
   });
 
   socket.on('msgFromMain', async (message, responseFunction) => {
@@ -48,9 +49,9 @@ io.on('connection', (socket) => {
         message.pass !== config.PASSPHRASE) {
       return socket.disconnect();
     }
-    const channel = message.app;
+    const channel = message.to;
     delete message.pass;
-    delete message.app;
+    delete message.to;
     socket.broadcast.emit(channel, message);
   });
 });
@@ -92,11 +93,14 @@ app.get('/:appFolder', async (req, res)=> {
   res.redirect('/404');
 })
 
-app.get('/:appFolder/*', async (req, res) => { // To be implemented
+app.get('/:appFolder/*', async (req, res) => {
+  // console.log (req.get('Referrer')); // Who asks for the resource, not needed now (just for potential future reference)
   const appChecked = await control.checkApp(req.params.appFolder);
   if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
-  // if (!appChecked.result && !(req.params['0'].includes('backend-static'))) {
-  if (!appChecked.result) {
+  if (!appChecked.result && !(req.params['0'].includes('backend-static'))) {
+    return res.redirect('/404');
+  }
+  if (req.params['0'].includes('..')) { // In case someone wants to get out of the app folder scope
     return res.redirect('/404');
   }
   if (appChecked.result === 'managedByFrontendApp' && !(req.params['0'].includes('static'))) {

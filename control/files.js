@@ -79,7 +79,8 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
     const elementsInAppsFolder = await fs.readdir(routeToAppsFolder);
     const foldersInAppsFolder = []
     for (const element of elementsInAppsFolder) {
-      if (await isFolder(path.join(routeToAppsFolder, element)))  { foldersInAppsFolder.push(element); }
+      if (element === 'main'  || element === 'admin') {} // These app names are not allowed, ignored if present
+      else if (await isFolder(path.join(routeToAppsFolder, element)))  { foldersInAppsFolder.push(element); }
     }
     // Check which folders contain apps with a valid structure
     const validApps = [];
@@ -156,9 +157,9 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
   } catch (error) {
     const msgError = `An error has happened when retrieving or managing the data of the apps installed.
     
-      This is the error triggered by the system:
+This is the error triggered by the system:
       
-      ${error}`;
+${error}`;
     return { msgError };
   }
 }
@@ -172,9 +173,9 @@ files.updateAppsInstalled = async (updatedApps) => {
   } catch (error) {
     const msgError = `An error has happened when updating the registry about the installed apps state.
 
-      This is the error triggered by the system:
+This is the error triggered by the system:
       
-      ${error}`;
+${error}`;
     return { msgError };
   }
 }
@@ -189,9 +190,9 @@ files.getAppsState = async () => {
   } catch (error) {
     const msgError = `An error has happened when reading the apps state file (to check whether the app you want to use is installed in the server).
 
-      This is the error triggered by the system:
+This is the error triggered by the system:
       
-      ${error}`;
+${error}`;
     return { msgError };
   }
 }
