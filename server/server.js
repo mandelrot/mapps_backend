@@ -56,14 +56,8 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
-app.post('/files', (req, res) => {
-  // File uploads pending
-});
-
-
 /* END OF INTERNAL APP ROUTES AND FUNCTIONS */
+
 
 
 
@@ -114,8 +108,8 @@ app.get('/:appFolder/*', async (req, res) => {
   }
 });
 
-
 /* END OF USERS ROUTES */
+
 
 
 
@@ -124,7 +118,6 @@ app.get('/:appFolder/*', async (req, res) => {
 app.all('*', (req, res) => { // Non-get petitions will end up here
   res.sendStatus(404);
 })
-
 
 
 server.listen(config.server.PORT, () => {

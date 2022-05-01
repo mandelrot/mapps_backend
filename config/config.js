@@ -5,26 +5,33 @@ const config = {};
 /* THE FOLLOWING BLOCK IS MEANT TO BE CUSTOMIZED BY YOU. 
 PLEASE READ THE COMMENTS AND FOLLOW THE INSTRUCTIONS */
 
-  config.locations = {
-    appsFolderRouteFromMainDirectory: ['..', '..', 'APPS']
-        // No need to change, in the production Electron app this will place the APPS
-        // folder in the root app directory (where the executable is)
-  };
+config.PASSPHRASE = 'VERY IMPORTANT - YOU SHOULD CUSTOMIZE THIS TEXT BEFORE COMPILATION';
+// Please read the security note at the end of this file!
 
-  config.PASSPHRASE = 'VERY IMPORTANT - YOU SHOULD CUSTOMIZE THIS TEXT BEFORE COMPILATION';
-    // Please read the security note at the end of this file!
+config.server = {
+  PORT: 3000, // Change to your needs, but:
+  // VERY IMPORTANT - PLEASE GET SURE THE PORT HERE IS THE SAME THAN THE PORT AT
+  // fronts/js/main.js  -->  Both variables must match so the main page can work!
+};
 
-  config.server = {
-    PORT: 3000, // Change to your needs
-      // VERY IMPORTANT - PLEASE GET SURE THE PORT HERE IS THE SAME THAN THE PORT AT
-      // fronts/js/main.js  -->  Both variables must match so the main page can work!
-  };
-
+config.files = {
+  uploadedFileMaxSize: (10*1024*1024) // 10 Mb
+  // Please note: this value is not absolute (it's not a server limit) because
+  // this system is based on absolute modularity and each frontend app should
+  // decide how to manage their own files. But this will be a reference for
+  // the apps that decide to use it.
+}
 
 /* END OF YOUR CUSTOMIZATION. 
 YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW HERE */
 
 
+
+config.locations = {
+  appsFolderRouteFromMainDirectory: ['..', '..', 'APPS']
+      // No need to change, in the production Electron app this will place the APPS
+      // folder in the root app directory (where the executable is)
+};
 
 
 

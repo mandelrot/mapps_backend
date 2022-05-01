@@ -36,6 +36,7 @@ Basic app structure = [
   {
     name: 'backend',
     children: [
+      { name: 'database', children: [] },
       {
         name: 'functions',
         children: [ { name: 'external.js' }, { name: 'internal.js' } ]
@@ -43,7 +44,8 @@ Basic app structure = [
       {
         name: 'info',
         children: [ { name: 'app-data.json' }, { name: 'app-icon' } ]
-      }
+      },
+      { name: 'models', children: [] }
     ]
   }
 ];
@@ -65,8 +67,8 @@ appCheck.isAFolderApp = async (pathToFolder) => {
           if (!isIndexHtmlThere) { throw error; }
           break;
         case 'backend': 
-          // The backend subfolder must contain at least the following elements:
-          const requiredGrandChildren = ['functions', 'info'];
+          // The backend subfolder must contain at least the following four elements:
+          const requiredGrandChildren = ['database', 'functions', 'info', 'models'];
           const foundGrandChildren = [];
           for(const grandChildBackend of child.children) {
             foundGrandChildren.push(grandChildBackend.name);
