@@ -120,9 +120,10 @@ To make frontend development easier, this is the communication standard suggeste
   }
 */
 control.msgFromApp = async (messageString) => {
+  let message;
   try {
     // Format checks
-    const message = JSON.parse(messageString);
+    message = JSON.parse(messageString);
     const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
     for (const requiredField of ['app', 'user', 'to', 'action', 'data']) {
       if (!Object.keys(message).includes(requiredField)) {
@@ -140,20 +141,18 @@ control.msgFromApp = async (messageString) => {
     // return what the function returns
     return whatTargetedFunctionReturns;
   } catch (error) {
-    // return msgError
-    const msgError= `Your action has invoked another app in the `
-    console.log ('Salta el error:')
-    console.log (error);
+    const msgError= `Your action has triggered some actions in the server that have provoked an internal error. Please contact the admins and transmit them 1) this exact message, 2) what you were doing in the moment to see this error, 3) the error time (when it happened) and 4) that they will find a log of the error in the folder APPS/${message.app}/app/backend-static/error-logs.`;
+    files.logError((message.app || 'BACKEND_SERVER-ERROR_LOGS'), `msgFromApp (when redirecting from ${message.app || '(unknown)'} to ${message.to || '(unknown)'} calling the function ${message.action || '(unknown)'})`, error);
+    return { msgError };
   }
 }
 
-control.msgToApp = (action, msg) => {
-  // This should be only reload app, reload data or logout
-}
+
+
+// control.msgToApp = (action, msg) => {
+//   // This should be only reload app, reload data or logout
+// }
 /* END OF FRONT APPS FRONTS ZONE */
-
-
-
 
 
 
@@ -168,6 +167,10 @@ control.checkApp = async (appFolder) => {
 
 control.checkAppFile = async (routeArray) => {
   return await backend.checkAppFile(routeArray);
+}
+
+control.isAppEnabled = async(appFolder) => {
+  return await backend.isAppEnabled(appFolder);
 }
 /* END OF CHECKING FUNCTIONS */
 

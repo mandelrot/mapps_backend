@@ -6,7 +6,8 @@ const colors = require('colors'), // delete
 
 const config = require(path.join(__dirname, '..', 'config', 'config.js')),
       appCheck = require(path.join('..', 'utils', 'app-check.js')),
-      encryption = require(path.join('..', 'utils', 'encryption.js'));
+      encryption = require(path.join('..', 'utils', 'encryption.js')),
+      time = require(path.join('..', 'utils', 'time.js'));
 
 
 // Apps folder: ensure it's there when starting, even if it's empty
@@ -19,47 +20,7 @@ const routeToAppsStateFile = path.join(__dirname, '..', ...config.locations.apps
 
 
 
-/* INTERNAL FUNCTIONS */
-function ensureBasicAppsStructure () { // Suite start
-  try {
-    fs.ensureDir(routeToAppsFolder);
-    fs.ensureFile(routeToAppsStateFile);
-  } catch (error) {
-    console.log ('***')
-    console.log ('Initialization error: there has been an error when ensuring the basic apps structure exists (the common apps folder and the apps state file within it.\n').
-    console.log ('This is the error: ' + error)
-    console.log ('***');
-  }
-}
-ensureBasicAppsStructure();
-
-async function checkBasicAppsStructure () { // During execution
-  try {
-    await fs.ensureDir(routeToAppsFolder);
-    await fs.ensureFile(routeToAppsStateFile);
-    return {result: true};
-  } catch (error) {
-    const msgError = `There has been an error when ensuring the basic apps structure exists (the common apps folder and the apps state file within it).
-
-      This is the error triggered by the system:
-      
-      ${error}`;
-    return { msgError };
-  }
-}
-
-async function isFolder(route) {
-  const lstat = await fs.lstat(route);
-  return lstat.isDirectory();
-}
-
-
-
-
-
-
-
-/* EXPORT */
+/* EXPORTS */
 const files = {};
 
 
@@ -182,7 +143,6 @@ ${error}`;
 
 
 
-
 files.getAppsState = async () => {
   try {
     appsState = JSON.parse(encryption.decipher(await (await fs.readFile(routeToAppsStateFile)).toString()));
@@ -198,11 +158,77 @@ ${error}`;
 }
 
 
-
 files.checkAppFile = async (routeArray) => {
   return await fs.pathExists(path.join(routeToAppsFolder, ...routeArray));
 }
 
 
 
+files.logError = async (appFolder, functionName, error) => {
+  try {
+    const logFileName = time.getFileFormattedTimeToDay() + '(UTC_time).log'
+  const logFile = path.join(routeToAppsFolder, appFolder, 'app', 'backend-static', 'error-logs',  logFileName);
+  await fs.ensureFile(logFile);
+  let fileContent = await fs.readFile(logFile);
+  const currentError = `---
+
+${time.getHourAndMinute('text')} (UTC time) - error at function ${functionName}:
+
+${error}
+
+---`;
+
+  fileContent += currentError;
+    await fs.writeFile(logFile, fileContent);
+  } catch (error) {
+    // If the error can't be logged the problem goes beyond this software
+    console.log (`
+Error when error loging:
+${error}
+`);
+  }
+}
+
+
 module.exports = files;
+/* END OF EXPORTS */
+
+
+
+
+
+/* INTERNAL FUNCTIONS */
+function ensureBasicAppsStructure () { // Suite start
+  try {
+    fs.ensureDir(routeToAppsFolder);
+    fs.ensureFile(routeToAppsStateFile);
+  } catch (error) {
+    console.log ('***');
+    console.log ('Initialization error: there has been an error when ensuring the basic apps structure exists (the common apps folder and the apps state file within it.\n');
+    console.log ('This is the error: ' + error);
+    console.log ('***');
+    files.logError('BACKEND_SERVER-ERROR_LOGS', 'ensureBasicAppsStructure', '(Automatic backend log) Initialization error: there has been an error when ensuring the basic apps structure exists (the common apps folder and the apps state file within it.This is the error: ' + error);
+  }
+}
+ensureBasicAppsStructure();
+
+async function checkBasicAppsStructure () { // During execution
+  try {
+    await fs.ensureDir(routeToAppsFolder);
+    await fs.ensureFile(routeToAppsStateFile);
+    return {result: true};
+  } catch (error) {
+    const msgError = `There has been an error when ensuring the basic apps structure exists (the common apps folder and the apps state file within it).
+
+      This is the error triggered by the system:
+      
+      ${error}`;
+    return { msgError };
+  }
+}
+
+async function isFolder(route) {
+  const lstat = await fs.lstat(route);
+  return lstat.isDirectory();
+}
+/* INTERNAL FUNCTIONS */

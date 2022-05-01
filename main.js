@@ -69,12 +69,16 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
 
 /* PENDING
    =======
-  pouchDB module
+  
+  - Control - implementar la función msgToApp
+  - admin-index-404.html: Tailwind CDN (switch to local optimized production version)
+  - Check "pending" comments
+  - delete utils/static/app-check copy.js (backup of the required front app structure)
+
 
   Delete: 
     - All the lines marked with a "delete" comment
     - package.json --> colors, and all the "colors" references
-    - admin-index-404.html: Tailwind CDN (switch to local optimized production version)
 */
 
 
