@@ -6,8 +6,6 @@ The "backend fronts" (admin page and suite entry point) need a few functions too
 const path = require('path');
 const files = require(path.join(__dirname, 'files.js'));
 
-const colors = require('colors'); // delete
-
 
 let appsStateInMemory = false;
 

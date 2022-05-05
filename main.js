@@ -3,8 +3,6 @@ configure ./config/config.js with your own data */
 
 const path = require('path');
 
-const colors = require('colors');
-
 
 
 
@@ -26,18 +24,17 @@ app.disableHardwareAcceleration(); // There is an "ugly" problem with some Chrom
 
 const createAdminWindow = () => {
   adminWindow = new BrowserWindow({
-    // width: 720, // To be implemented: uncomment in production
-    // height: 540,
+    width: 720,
+    height: 540,
     backgroundColor:' #ffffff',
     autoHideMenuBar: true,
     show: false,
     webPreferences: {
       nodeIntegration: true, contextIsolation: false,
-      // devTools: false // to be implemented: uncomment in production
+      devTools: false
     }
   });
-  // adminWindow.maximize(); // to be implemented: uncomment in production
-  // adminWindow.webContents.openDevTools(); // delete in production
+  adminWindow.maximize();
   adminWindow.once('ready-to-show', () => {
     adminWindow.show();
   });
@@ -47,7 +44,6 @@ const createAdminWindow = () => {
 
 app.whenReady().then(() => {
   createAdminWindow();
-  // createFakeWindow(); // Delete in production, just for tests
 
   app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
@@ -67,18 +63,5 @@ ipcMain.handle('msgFromAdmin', async(e, message) => {
 });
 
 
-/* PENDING
-   =======
-  
-  - Control - implementar la función msgToApp
-  - admin-index-404.html: Tailwind CDN (switch to local optimized production version)
-  - Check "pending" comments
-  - delete utils/static/app-check copy.js (backup of the required front app structure)
-
-
-  Delete: 
-    - All the lines marked with a "delete" comment
-    - package.json --> colors, and all the "colors" references
-*/
 
 
