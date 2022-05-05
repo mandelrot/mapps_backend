@@ -1,9 +1,6 @@
 const path = require('path'),
       fs = require('fs-extra');
 
-const colors = require('colors'), // delete
-      util = require('util'); // delete
-
 const config = require(path.join(__dirname, '..', 'config', 'config.js')),
       appCheck = require(path.join('..', 'utils', 'app-check.js')),
       encryption = require(path.join('..', 'utils', 'encryption.js')),

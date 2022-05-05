@@ -27,6 +27,7 @@ YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW HERE */
 
 
 
+
 config.locations = {
   appsFolderRouteFromMainDirectory: ['..', '..', 'APPS']
       // No need to change, in the production Electron app this will place the APPS
@@ -59,7 +60,7 @@ Before compiling the app to make a real production software customized just for 
 you should change the PASSPHRASE variable to something only you know. And right after 
 doing that, you should change it again and save (to erase all trace of what it was).
 
-The frontend apps will use the PASSPHRASE variable to store their encrypted information
+The frontend apps may use the PASSPHRASE variable to store their encrypted information
 (example: passwords). If someone steals your database files they still could not see
 the encripted fields. The absolute security doesn't exist of course, but this adds
 a protection layer.

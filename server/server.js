@@ -1,5 +1,3 @@
-const colors = require('colors'); // delete
-const util = require('util');
 
 const path = require('path');
 const config = require(path.join(__dirname, '..', 'config', 'config.js')),
@@ -88,7 +86,6 @@ app.get('/:appFolder', async (req, res)=> {
 })
 
 app.get('/:appFolder/*', async (req, res) => {
-  // console.log (req.get('Referrer')); // Who asks for the resource, not needed now (just for potential future reference)
   const appChecked = await control.checkApp(req.params.appFolder);
   if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
   if (!appChecked.result && !(req.params['0'].includes('backend-static'))) {
@@ -121,6 +118,6 @@ app.all('*', (req, res) => { // Non-get petitions will end up here
 
 
 server.listen(config.server.PORT, () => {
-  console.log (`Server listening on ${config.server.PORT}`.gray);
+  console.log (`Server listening on ${config.server.PORT}`);
 })
 

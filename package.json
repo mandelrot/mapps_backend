@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/mandelrot/mapps_backend#readme",
   "dependencies": {
-    "colors": "^1.4.0",
     "crypto-js": "^4.1.1",
     "directory-tree": "^3.2.1",
     "express": "^4.17.2",
