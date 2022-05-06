@@ -17,7 +17,6 @@ const control = {};
 control.msgFromAdmin = async (message) => {
   const response = {
     app: 'control', // Not used, just to keep the communications standard
-    user: 'control', // not used
     to: 'admin', // not used
     action: message.action, // not used
     data: { apps: [] }
@@ -48,7 +47,6 @@ control.msgToAdmin = (action, msg) => {
   if (action !== 'reload' && action !== 'msg') { return; } // Everything else is forbidden
   const messageObject = {
     app: 'control', // Not used, just to keep the communications format
-    user: 'control', // Not used
     to: 'admin', // not used
     action,
     data: { msg }
@@ -64,7 +62,6 @@ control.msgToAdmin = (action, msg) => {
 control.msgFromMain = async (message) => {
   const response = {
     app: 'control', // Not used, just to keep the communications standard
-    user: 'control', // not used
     to: 'main', // not used
     action: message.action, // not used
     data: {apps: []}
@@ -90,7 +87,6 @@ control.msgToMain = (action, msg) => {
   if (action !== 'reload' && action !== 'msg') { return; } // Everything else is forbidden
   const messageObject = {
     app: 'control', // Not used, just to keep the communications format
-    user: 'control', // Not used
     to: 'main',
     action,
     data: { msg }
@@ -106,7 +102,6 @@ control.msgToMain = (action, msg) => {
 To make frontend development easier, this is the communication standard suggested among the front apps:
   Request object: {
     app: 'Who makes the request (the app folder name)',
-    user: 'User token (when needed)', 
     to: 'Who is the request targeted to (the app folder name)',
     action: 'functionToInvoke', 
     data: { 
@@ -124,7 +119,7 @@ control.msgFromApp = async (messageString) => {
     // Format checks
     message = JSON.parse(messageString);
     const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
-    for (const requiredField of ['app', 'user', 'to', 'action', 'data']) {
+    for (const requiredField of ['app', 'to', 'action', 'data']) {
       if (!Object.keys(message).includes(requiredField)) {
         throw formatErrorMsg;
       }

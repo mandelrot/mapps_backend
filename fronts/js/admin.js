@@ -8,7 +8,6 @@ const path = require('path');
   function sendToBackend(action, data) {
     const message = { // This object has this structure just to keep the standard, even with unused fields
       app: 'admin',
-      user: 'admin',
       to: 'control', // not used
       action,
       data

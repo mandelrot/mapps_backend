@@ -14,7 +14,6 @@ const socket = io(`${SERVER}:${PORT}`);
 function sendToBackend(action, data) {
   const message = { // This object has this structure just to keep the standard, even with unused fields
     app: 'main',
-    user: 'main',
     to: 'control', // not used
     action,
     data
