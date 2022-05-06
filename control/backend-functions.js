@@ -76,7 +76,9 @@ backend.checkAppFile = async (routeArray) => {
   return await files.checkAppFile(routeArray);
 }
 
-
+backend.logError = async (appFolder, functionName, error) => {
+  files.logError(appFolder, functionName, error);
+}
 
 
 module.exports = backend;

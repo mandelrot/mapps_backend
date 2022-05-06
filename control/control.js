@@ -117,7 +117,12 @@ control.msgFromApp = async (messageString) => {
   let message;
   try {
     // Format checks
-    message = JSON.parse(messageString);
+    try {
+      message = JSON.parse(messageString);
+    } catch (error) {
+      message = {};
+      throw('The message received in the backend to redirect does not have a valid format.')
+    }
     const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
     for (const requiredField of ['app', 'to', 'action', 'data']) {
       if (!Object.keys(message).includes(requiredField)) {
@@ -135,8 +140,8 @@ control.msgFromApp = async (messageString) => {
     // return what the function returns
     return whatTargetedFunctionReturns;
   } catch (error) {
-    const msgError= `Your action has triggered some actions in the server that have provoked an internal error. Please contact the admins and transmit them 1) this exact message, 2) what you were doing in the moment to see this error, 3) the error time (when it happened) and 4) that they will find a log of the error in the folder APPS/${message.app}/app/backend-static/error-logs.`;
-    files.logError((message.app || 'BACKEND_SERVER-ERROR_LOGS'), `msgFromApp (when redirecting from ${message.app || '(unknown)'} to ${message.to || '(unknown)'} calling the function ${message.action || '(unknown)'})`, error);
+    const msgError= `Your action has triggered some actions in the server that have provoked an internal error. Please contact the admins and transmit them 1) this exact message, 2) what you were doing in the moment to see this error, 3) the error time (when it happened) and 4) that they will find a log of the error in the folder APPS/${message.app || 'BACKEND_SERVER-ERROR_LOGS'}/app/backend-static/error-logs.`;
+    backend.logError((message.app || 'BACKEND_SERVER-ERROR_LOGS'), `msgFromApp (when redirecting from ${message.app || '(unknown)'} to ${message.to || '(unknown)'} calling the function ${message.action || '(unknown)'})`, error);
     return { msgError };
   }
 }
