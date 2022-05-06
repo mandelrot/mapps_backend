@@ -1,7 +1,7 @@
 {
   "name": "mapps_backend",
   "version": "1.0.0",
-  "description": "An ERP motor to support the Mandelrot Apps ecosystem.",
+  "description": "An ERP engine, 100% portable and 100% modular.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -13,7 +13,10 @@
     "type": "git",
     "url": "git+https://github.com/mandelrot/mapps_backend.git"
   },
-  "author": "Jose Alemán / Mandelrot",
+  "author": {
+    "name": "Jose Alemán / Mandelrot",
+    "url": "http://josealeman.info"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mandelrot/mapps_backend/issues"

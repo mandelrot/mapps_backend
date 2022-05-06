@@ -1,20 +1,22 @@
-/* Please note: before working with the app, you should 
-configure ./config/config.js with your own data */
+/* Please note: before compiling the app, you should 
+configure ./config/config.js with your own data
+See full docs, you will find everything you need there */
 
 const path = require('path');
 
 
 
-
-
-/* Servers up: backend (only accesible from inside the server) and public */
+/* Server up - This starts the actual backend app*/
 const server = require(path.join(__dirname, 'server', 'server.js'));
 
 
 
 /* Electron */
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu } = require('electron');
 let adminWindow;
+const iconpath = path.join(__dirname, 'trayicon.png');
+  // The iconpath is in the root directory because of some Linux incompatibilities
+let tray;
 
 app.disableHardwareAcceleration(); // There is an "ugly" problem with some Chromium versions,
   // they come with the WebGL disabled by default (and Electron uses hardware acceleration by
@@ -26,6 +28,7 @@ const createAdminWindow = () => {
   adminWindow = new BrowserWindow({
     width: 720,
     height: 540,
+    icon: iconpath,
     backgroundColor:' #ffffff',
     autoHideMenuBar: true,
     show: false,
@@ -50,18 +53,32 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createAdminWindow();
   });
+
+  tray = new Tray(iconpath);
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Admin Window', click: () => {
+      if (adminWindow === null) { createAdminWindow(); }
+      else { adminWindow.maximize(); }
+    }},
+    { label: 'Quit', click: () => {
+      app.quit();
+    }}
+  ])
+  tray.setToolTip('Mapps Admin');
+  tray.setContextMenu(contextMenu);
+
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+app.on('window-all-closed', function (event) {
+  event.preventDefault();
+  adminWindow = null; 
 });
+
+
 
 
 // Communication with the admin window
 ipcMain.handle('msgFromAdmin', async(e, message) => {
   return await server.msgFromAdmin(message);
 });
-
-
-
 
