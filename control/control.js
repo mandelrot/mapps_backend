@@ -119,9 +119,9 @@ control.msgFromApp = async (messageString) => {
     // Format checks
     try {
       message = JSON.parse(messageString);
-    } catch (error) {
+    } catch (error) { // It should be a string that can be JSON-parsed
       message = {};
-      throw('The message received in the backend to redirect does not have a valid format.')
+      throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${messageString}`);
     }
     const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
     for (const requiredField of ['app', 'to', 'action', 'data']) {

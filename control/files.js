@@ -163,11 +163,16 @@ files.checkAppFile = async (routeArray) => {
 
 files.logError = async (appFolder, functionName, error) => {
   try {
-    const logFileName = time.getFileFormattedTimeToDay() + '(UTC_time).log'
-  const logFile = path.join(routeToAppsFolder, appFolder, 'app', 'backend-static', 'error-logs',  logFileName);
-  await fs.ensureFile(logFile);
-  let fileContent = await fs.readFile(logFile);
-  const currentError = `---
+    const logFileName = time.getFileFormattedTimeToDay() + '(UTC_time).log';
+    let logFile;
+    if (appFolder === 'BACKEND_SERVER-ERROR_LOGS') {
+      logFile = path.join(routeToAppsFolder, appFolder, logFileName);
+    } else {
+      logFile = path.join(routeToAppsFolder, appFolder, 'app', 'backend-static', 'error-logs',  logFileName);
+    }
+    await fs.ensureFile(logFile);
+    let fileContent = await fs.readFile(logFile);
+    const currentError = `---
 
 ${time.getHourAndMinute('text')} (UTC time) - error at function ${functionName}:
 
