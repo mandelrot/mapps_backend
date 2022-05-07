@@ -14,7 +14,9 @@ const path = require('path');
     };
     ipcRenderer.invoke('msgFromAdmin', message)
       .then((response) => {
-        const apps = response.data.apps ? response.data.apps : [];
+        let apps = response.data.apps ? response.data.apps : [];
+        apps = apps.sort((a,b) => (a.appFullName > b.appFullName) ? 1 : ((b.appFullName > a.appFullName) ? -1 : 0));
+
         if (response.data.msgOk || response.data.msgError) {
           window.dispatchEvent(new CustomEvent('msg', { detail: { msgOk: response.data.msgOk || false, msgError: response.data.msgError || false } }));
         }
