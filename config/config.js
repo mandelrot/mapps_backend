@@ -14,29 +14,21 @@ config.server = {
   // fronts/js/main.js  -->  Both variables must match so the main page can work!
 };
 
-config.files = {
-  uploadedFileMaxSize: (10*1024*1024) // 10 Mb
-  // Please note: this value is not absolute (it's not a server limit) because
-  // this system is based on absolute modularity and each frontend app should
-  // decide how to manage their own files. But this will be a reference for
-  // the apps that decide to use it.
-}
-
 /* END OF YOUR CUSTOMIZATION. 
 YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW HERE */
 
 
 
 
+
+
 config.locations = {
-  appsFolderRouteFromMainDirectory: ['..', '..', 'APPS']
-      // No need to change, in the production Electron app this will place the APPS
-      // folder in the root app directory (where the executable is)
+  appsFolderRouteFromMainDirectory: ['..', '..', 'APPS'] // No need to change
 };
 
 
 
-/* If ./config_dev is there we are in DEV environment */
+/* If ./config_dev is there we are in DEV environment, otherwise the app will use this file */
 const path = require('path');
 
 const configDev = (() => {

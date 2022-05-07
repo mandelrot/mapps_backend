@@ -5,8 +5,6 @@ const config = require(path.join(__dirname, '..', 'config', 'config.js')),
       backend = require(path.join(__dirname, 'backend-functions.js'));
 
 
-      
-
 
 const control = {};
 
@@ -113,15 +111,17 @@ To make frontend development easier, this is the communication standard suggeste
     msgError: 'Some error message the frontend app will display'
   }
 */
-control.msgFromApp = async (messageString) => {
+control.msgFromApp = async (incomingMessage) => {
   let message;
   try {
     // Format checks
     try {
-      message = JSON.parse(messageString);
+      message = 
+        typeof incomingMessage === 'object' && !Array.isArray(incomingMessage) ? incomingMessage 
+        : JSON.parse(incomingMessage);
     } catch (error) { // It should be a string that can be JSON-parsed
-      message = {};
-      throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${messageString}`);
+      message = {data:{}};
+      throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${incomingMessage}`);
     }
     const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
     for (const requiredField of ['app', 'to', 'action', 'data']) {
@@ -147,10 +147,39 @@ control.msgFromApp = async (messageString) => {
 }
 
 
+/* The backend functions in the frontend apps may require utilities available in the backend. */
+control.utils = async (messageString) => {
+  let message
+  try {
+    // Format checks
+    try {
+      message = JSON.parse(messageString);
+    } catch (error) { // It should be a string that can be JSON-parsed
+      message = {data: {}};
+      throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${messageString}`);
+    }
+    const formatErrorMsg = 'The request sent to the backend does not have a correct format. There must be something wrong with the user app.';
+    for (const requiredField of ['app', 'to', 'action', 'data']) {
+      if (!Object.keys(message).includes(requiredField)) {
+        throw formatErrorMsg;
+      }
+    }
+    if (message.to.includes('..')) { throw formatErrorMsg; } // To not get out of the /public folder
+    if (!message.data.params || !Array.isArray(message.data.params)) { throw formatErrorMsg; }
+    // Passing the data to the utils/public file and returning its value
+    const file = require(path.join(__dirname, '..', 'utils', 'public', message.to));
+    const whatTargetedFunctionReturns = await file[message.action](...message.data.params);
+    return whatTargetedFunctionReturns;
+  } catch (error) {
+const msgError= `There has been an error in the control/utils function in the backend. It could most likely be because the request has some kind of mistake, or because the utility file required does not exist with that name, or maybe the function is wrongly called.
 
-// control.msgToApp = (action, msg) => {
-//   // This should be only reload app, reload data or logout
-// }
+This is the error received: ${error}   
+
+This error will be logged in the folder APPS/${message.app || 'BACKEND_SERVER-ERROR_LOGS'}/app/backend-static/error-logs.`;
+backend.logError((message.app || 'BACKEND_SERVER-ERROR_LOGS'), `msgFromApp (when redirecting from ${message.app || '(unknown)'} to ${message.to || '(unknown)'} calling the function ${message.action || '(unknown)'})`, error);
+return { msgError };
+  }
+}
 /* END OF FRONT APPS FRONTS ZONE */
 
 

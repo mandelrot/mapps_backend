@@ -3,8 +3,8 @@ const path = require('path'),
 
 const config = require(path.join(__dirname, '..', 'config', 'config.js')),
       appCheck = require(path.join('..', 'utils', 'app-check.js')),
-      encryption = require(path.join('..', 'utils', 'encryption.js')),
-      time = require(path.join('..', 'utils', 'time.js'));
+      encryption = require(path.join('..', 'utils', 'public', 'encryption.js')),
+      time = require(path.join('..', 'utils', 'public', 'time.js'));
 
 
 // Apps folder: ensure it's there when starting, even if it's empty

@@ -36,6 +36,10 @@ io.on('connection', (socket) => {
     response = await control.msgFromApp(message);
     responseFunction(response);
   });
+  socket.on('utils', async (message, responseFunction) => {
+    response = await control.utils(message);
+    responseFunction(response);
+  });
 
   socket.on('msgFromMain', async (message, responseFunction) => {
     response = await control.msgFromMain(message);

@@ -2,7 +2,7 @@
 const CryptoJS = require("crypto-js");
 
 const path = require('path');
-const { PASSPHRASE } = require(path.join(__dirname, '..', 'config', 'config.js'));
+const { PASSPHRASE } = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 
 
 
