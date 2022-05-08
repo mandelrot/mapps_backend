@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
+  <title>Minimal functioning app</title>
+</head>
+<body style="padding: 40px;">
+
+  <!-- HTML ELEMENTS -->
+  <h2>Here you can see the basic frontend app workflow</h2>
+  <p>Please see the code to understand how it works.</p>
+  <hr style="margin: 50px 0">
+  
+  <h3>Invoking a backend function from the same app</h3>
+  <button onclick="callInternalBackendFunction()">Send</button>
+  <p id="internalResult">The result of the invoked app will be shown here</p>
+    
+  <div style="margin: 100px 0"></div>
+
+  <h3>Invoking a backend function from another app</h3>
+  <button onclick="callExternalBackendFunction()">Send</button>
+  <p id="externalResult">The result of the invoked app will be shown here</p>
+
+
+
+  <!-- JAVASCRIPT -->
+  <script src="/minimal-functioning/socket.io.min.js"></script><!-- Docs: https://socket.io -->
+  <script>
+    const socket = io(`http://127.0.0.1:3000`); // The port MUST match the backend port channel! See config.js there
+
+    function callInternalBackendFunction() {
+      const internalResult = document.getElementById('internalResult');
+
+      // Required standard communications object, please check the docs at https://github.com/mandelrot/mapps_backend
+      const messageToSelf = {
+        app: 'minimal-functioning', // The name of this app folder
+        to: 'minimal-functioning', // The name of the targeted app folder - The backend will look for this folder
+        action: 'myExampleFunction', // The function that will be called (in this case within internal.js)
+        data: {
+          params: [{foo: 'bar'}] // The params array for the function
+        }
+      };
+
+      // All the info about communications in the docs
+      socket.emit('msgFromApp', messageToSelf, (responseString) => {
+        if (responseString && responseString.msgError) { alert (responseString.msgError) }
+        internalResult.innerText = responseString;
+      });
+    }
+
+
+    function callExternalBackendFunction() {
+      const internalResult = document.getElementById('internalResult');
+
+      const messageToOtherApp = {
+        app: 'minimal-functioning',
+        to: 'minimal',                // The backend will look for this app folder...
+        action: 'myExampleFunction',  // ... and within it, "/backend/functions/external.js" since it's a different app
+        data: {
+          params: [{whoIsCalling: 'Minimal-Functioning App'}]
+        }
+      };
+
+      // Please note: if you work with a non-JS frontend technology you don't need to send an actual JSON
+      // object to the backend. You can use a string (as long as it has a valid format), and the backend
+      // will detect it and parse it before doing the validations. See the example here:
+      const stringMessageToOtherApp = JSON.stringify(messageToOtherApp);
+
+      socket.emit('msgFromApp', stringMessageToOtherApp, (responseObject) => {
+        if (responseObject && responseObject.msgError) { alert(responseObject.msgError) }
+        externalResult.innerText = responseObject.msgOk;
+      });
+    }
+
+    const externalResult = document.getElementById('externalResult');
+
+
+
+  </script>
+
+
+</body>
+</html>

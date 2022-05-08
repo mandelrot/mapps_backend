@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
+  <title>Utils example</title>
+</head>
+<body style="padding: 40px;">
+
+  <h2>How to use backend modules</h2>
+  <p>Each app has its own backend function modules (internal.js and external.js), and can have any other module to work as we will see in this example. Besides this, the backend has a public folder (/utils/public) where there are some common utilities modules too, with functions that can be called directly from the frontend (from the browser itself) with an specific "utils" socket event.</p>
+  <p>So there are two ways to use Node Modules from your app. Here will see examples of them:</p>
+
+  <p style="margin-left: 15px;">- First, this webpage will ask directly to the backend to encrypt a text. The backend will look for the generic /utils/public/encryption.js module, use it to cipher the text, and send it back.</p>
+  <p style="margin-left: 15px;">- Second, this webpage will ask its own internal.js module to use a self-contained encryption module in the frontend folder. The internal.js module will require its own module, cipher the text, and send it back.</p>
+
+
+  <hr style="margin: 50px 0;">
+
+  <h3 style="margin-bottom: 40px;">Test the two ways of working</h3>
+  <span>Write something here and press the buttons below:</span>
+  <input type="text" id="inputToEncript">
+
+  <br/><br/><br/>
+
+  <button onclick="sendToUtilsFromBrowser()">Use the backend generic encryption module</button>
+  <p id="encryptedFromBrowser">The encrypted text (coming from the backend) will appear here.</p>
+
+  <br/>
+
+  <button onclick="sendToUtilsFromInternalJS()">Send to internal.js to require encription from there</button>
+  <p id="encryptedFromInternalJs">The encrypted text (coming from internal.js) will appear here.</p>
+
+
+  <br/>
+
+  <p>IMPORTANT: the modularity of this system implies that the frontend app modules are totally independent from the backend ones. In this encryption example, please note that the encryption password we use to cipher the texts are also independent and hence different. Using a common encryption password for the frontend apps or an app-specific one for each is your choice.</p>
+
+
+
+
+
+  <script src="/using-modules/socket.io.min.js"></script>
+  <script src="/using-modules/index.js"></script>
+
+
+
+</body>
+</html>

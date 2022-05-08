@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A little css touch just to make it look less ugly -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
+  <title>Files example</title>
+</head>
+<body style="padding: 40px;">
+
+  <h2>Uploading files</h2>
+  <p>Just a quick example on how to upload files to your server using sockets so you won't need to google it. Check the code to see how it's done.</p>
+  <p style="margin: 40px 0;">
+    Use this form to select the files/texts you want, and check the /APPS/files frontend folder to see they have been successfully uploaded.
+  </p>
+
+  <!-- UPLOAD FORM -->
+  <input class="texts" type="text" name="text1" >
+  <input class="files" type="file" name="file1" /> 
+  <br/><br/>
+  <input class="texts" type="text" name="text2" >
+  <input class="files" type="file" name="file2" /> 
+  <br/><br/>
+  <button id="upload-button" onclick="send()"> Upload </button>
+
+  <br/><br/>
+
+  <h5 id="backendResponse"></h5>
+
+
+  <script src="/files/socket.io.min.js"></script>
+  <script src="/files/index.js"></script>
+
+
+</body>
+</html>
