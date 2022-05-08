@@ -1,0 +1,4 @@
+{
+  "appFullName": "05 - Database example",
+  "appDescription": "The backend has an in-file database module already installed (PouchDB), which you can directly require and use to store data in your frontend app. This example will give you a basic idea to know how it works."
+}

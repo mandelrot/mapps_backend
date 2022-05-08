@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A little css touch just to make it look less ugly -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
+  <title>Minimal app</title>
+</head>
+<body style="padding: 40px;">
+
+  <h2>Database (ultrabasic) example</h2>
+
+
+  <p>Write something in these two fields (if empty they will be auto-filled) and send it to the backend DB:</p>
+  <span>Write something here: </span><input type="text" id="value1">
+  <br/><br/>
+  <span>And something here too: </span><input type="text" id="value2">
+  <br/><br/>
+  <button id="blockSend" onclick="storeAtBackend()">Store these values at remote backend</button>
+  <h5 id="registryResult"></h5>
+
+
+  <div id="blockRetrieve" style="margin-top: 50px;" hidden>
+    <p>And now you can retrieve the data stored in the remote DB:</p>
+    <button id="btnGoGetIt" onclick="retrieveFromBackend()">Go get it</button>
+    <br/>
+    <h5 id="retrieved"></h5>
+    <br/><br/>
+    <p id="retrievedMsg" hidden><strong>Try reloading this page (or restarting the backend server if you want) and sending more data, and you will see the db keeps the previous ones and adds the new.</strong></p>
+  </div>
+
+
+
+
+  <script src="/database/socket.io.min.js"></script>
+  <script src="/database/index.js"></script>
+  
+
+</body>
+</html>
