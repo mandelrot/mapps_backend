@@ -33,16 +33,23 @@ module.exports = {
 // Socket connections with the outside world
 io.on('connection', (socket) => {
   socket.on('msgFromApp', async (message, responseFunction) => {
-    response = await control.msgFromApp(message);
+    const response = await control.msgFromApp(message);
     responseFunction(response);
   });
   socket.on('utils', async (message, responseFunction) => {
-    response = await control.utils(message);
+    const response = await control.utils(message);
     responseFunction(response);
+  });
+  socket.on('msgToBroadcast', (message) => {
+    const messageToBroadcast = control.msgToBroadcast(message);
+    if (messageToBroadcast.msgOk) { // Otherwise ignored
+      const stringified = JSON.stringify(messageToBroadcast.msgOk);
+      io.emit('broadcast', stringified);
+    }
   });
 
   socket.on('msgFromMain', async (message, responseFunction) => {
-    response = await control.msgFromMain(message);
+    const response = await control.msgFromMain(message);
     responseFunction(response);
   });
 

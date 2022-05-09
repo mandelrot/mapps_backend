@@ -130,7 +130,8 @@ control.msgFromApp = async (incomingMessage) => {
       }
     }
     if (!message.data.params || !Array.isArray(message.data.params)) { throw formatErrorMsg; }
-    // The targeted app must be present and enabled
+    // Both the origin app and targeted app must be present and enabled
+    if (!await backend.isAppEnabled(message.app)) { return; }
     if (!await backend.isAppEnabled(message.to)) { return; }
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
@@ -149,7 +150,7 @@ control.msgFromApp = async (incomingMessage) => {
 
 /* The backend functions in the frontend apps may require utilities available in the backend. */
 control.utils = async (incomingMessage) => {
-  let message
+  let message;
   try {
     // Format checks
     try {
@@ -182,9 +183,33 @@ backend.logError((message.app || 'BACKEND_SERVER-ERROR_LOGS'), `msgFromApp (when
 return { msgError };
   }
 }
+
+
+control.msgToBroadcast = (incomingMessage) => {
+  let message;
+  // Format checks
+  try {
+    message = 
+      typeof incomingMessage === 'object' && !Array.isArray(incomingMessage) ? incomingMessage 
+      : JSON.parse(incomingMessage);
+  } catch (error) {
+    return;
+  }
+  // Key fields validations
+  if (typeof message.app !== 'string') { return; }
+  if (!(message.to === 'apps' || message.to === 'user')) { return; }
+  if (message.to === 'user' && !(message.data && message.data.user && typeof message.data.user === 'string')) { return; }
+  const msgOk = { sender: message.app};
+  // Only two possible outputs:
+  if (message.to === 'apps') { 
+    msgOk.action = 'reload';
+  } else if (message.to === 'user') {
+    msgOk.action = 'logout';
+    msgOk.user = message.data.user;
+  }
+  return { msgOk };
+}
 /* END OF FRONT APPS FRONTS ZONE */
-
-
 
 
 
