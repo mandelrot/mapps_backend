@@ -1,10 +1,15 @@
-const path = require('path'); // We are in the Node environment so we can use it
+const path = require('path');
 
+
+
+// For this example we will not use the backend encryption module sent in the "backendInfo"
+// object (we could) but an independent module of our own. Just to demonstrate it can be done
 const encryption = require(path.join(__dirname, 'your-aux-folder','encryption.js'));
 
 
-
 const myFunctions = {};
+
+
 
 
 myFunctions.cipherFront = (textToCipher) => {

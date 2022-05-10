@@ -4,7 +4,16 @@ const db = require(path.join(__dirname, 'db'));
 
 
 
+
 const myFunctions = {};
+
+
+let backendInfo;
+myFunctions.importBackendInfo = (bInfo) => {
+  // We bring an instance of the Node pouchDB module from the backend
+  if (!backendInfo) { backendInfo = bInfo; }
+  db.importDB(backendInfo.modules.PouchDB); // and send it to our db module
+};
 
 
 myFunctions.store = async (dataArray) => {

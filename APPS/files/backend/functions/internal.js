@@ -1,16 +1,27 @@
-// The backend use an extended version of fs called "fs-extra":
-// you have all the standard fs functions, plus some others
-// https://www.npmjs.com/package/fs-extra
-const fs = require('fs-extra'); 
+
 
 const path = require('path');
 
-const filesFolder = path.join(__dirname, 'my-uploaded-files');
-fs.ensureDirSync(filesFolder);
+// We could also import "fs-extra" from the backend. It does the same
+// with some extra functions - https://www.npmjs.com/package/fs-extra
+
+
 
 
 
 const internalFunctions = {}; // You could name the object as you want
+
+let backendInfo;
+let fs; 
+const filesFolder = path.join(__dirname, 'my-uploaded-files');
+internalFunctions.importBackendInfo = (bInfo) => {
+  if (!backendInfo) { backendInfo = bInfo; }
+  fs = backendInfo.modules.fs;
+    // This "fs" is actually an extended package, "fs-extra", with more useful functions
+    // https://www.npmjs.com/package/fs-extra
+  fs.ensureDirSync(filesFolder);
+};
+
 
 
 

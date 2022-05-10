@@ -6,6 +6,31 @@ const config = require(path.join(__dirname, '..', 'config', 'config.js')),
 
 
 
+// Tools to send to the frontend packages so they can directly use them. Right before each
+// routed message, the backend will invoke an importing function in internal/external.js
+// (if it exists) passing it this object, just to make sure that module can use the information
+let backendInfo;
+function setBackendInfo () {
+  const { io } = require("socket.io-client"); 
+
+  backendInfo = {
+    socketPort: config.server.port,
+    modules: {
+      // Node packages present in package.json that will be availale 
+      PouchDB: require('pouchdb-node'),
+      fs: require('fs-extra'),
+      cron: require('node-cron'),
+      // Other elements 
+      encryption: require(path.join(__dirname, '..', 'utils', 'public', 'encryption.js')),
+      socket: io(`http://127.0.0.1:${config.server.PORT}`) // push notifications
+    }
+  }; 
+};
+setBackendInfo();
+
+
+
+
 const control = {};
 
 
@@ -136,6 +161,7 @@ control.msgFromApp = async (incomingMessage) => {
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
+    if (functions.importBackendInfo) { functions.importBackendInfo(backendInfo); }
     // Execute the function said in "action", passing the "data --> params" object as argument
     const whatTargetedFunctionReturns = await functions[message.action](...message.data.params);
     // return what the function returns

@@ -1,12 +1,21 @@
 
 
-// In order to be able to trigger push events this module needs to access socket
-const { io } = require("socket.io-client");
-const socket = io(`http://127.0.0.1:3000`);
-
-
 
 const myFunctions = {};
+
+
+// In order to be able to trigger push events this module needs to access the frontend socket package
+// to send push messages to the server (and then make them be broadcasted). We need to use the socket
+// sent from the backend with this purpose, imported with the function below:
+let socket;
+let backendInfo;
+myFunctions.importBackendInfo = (bInfo) => {
+  if (!backendInfo) { backendInfo = bInfo; }
+  // We bring an instance of the Node socket-io-client module from the backend
+  if (!socket) {
+    socket = backendInfo.modules.socket; // and this is the socket the others functions will use
+  }
+};
 
 
 myFunctions.triggerPush = () => {

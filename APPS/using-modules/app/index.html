@@ -10,10 +10,12 @@
 <body style="padding: 40px;">
 
   <h2>How to use backend modules</h2>
-  <p>Each app has its own backend function modules (internal.js and external.js), and can have any other module to work as we will see in this example. Besides this, the backend has a public folder (/utils/public) where there are some common utilities modules too, with functions that can be called directly from the frontend (from the browser itself) with an specific "utils" socket event.</p>
+  <p>Each app has its own function modules (two files called "internal.js" and "external.js" located in its own "backend of the app package"), and they can use some basic modules provided by the server or use their own (having them in subfolders and just requiring them).</p>
+
+  <p>Besides this, the server has a public folder (/utils/public) where there are some common utilities modules too, with functions that can be called directly from the frontend (from the browser itself) with an specific "utils" socket event.</p>
   <p>So there are two ways to use Node Modules from your app. Here will see examples of them:</p>
 
-  <p style="margin-left: 15px;">- First, this webpage will ask directly to the backend to encrypt a text. The backend will look for the generic /utils/public/encryption.js module, use it to cipher the text, and send it back.</p>
+  <p style="margin-left: 15px;">- First, this webpage will ask directly to the server (the actual backend) to encrypt a text. The backend will look for the generic /utils/public/encryption.js module, use it to cipher the text, and send it back.</p>
   <p style="margin-left: 15px;">- Second, this webpage will ask its own internal.js module to use a self-contained encryption module in the frontend folder. The internal.js module will require its own module, cipher the text, and send it back.</p>
 
 
@@ -36,7 +38,7 @@
 
   <br/>
 
-  <p>IMPORTANT: the modularity of this system implies that the frontend app modules are totally independent from the backend ones. In this encryption example, please note that the encryption password we use to cipher the texts are also independent and hence different. Using a common encryption password for the frontend apps or an app-specific one for each is your choice.</p>
+  <p>IMPORTANT: the frontend apps may use their own packages as said. But the encryption is a special case, because it needs an "encryption password" and if someone uses the backend encryption module (with its password) and then someone else uses an independent encryption module (with a different password) they both will not be able to work together. The developer must choose between encryption modularity or encryption coherence for their frontend apps.</p>
 
 
 

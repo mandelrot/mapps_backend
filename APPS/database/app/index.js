@@ -40,8 +40,8 @@ function retrieveFromBackend() {
 
   socket.emit('msgFromApp', message, (response) => {
     if (response && response.msgError) { alert(response.msgError); }
-    const respuestaParseada = response.msgOk.map(cadaObjeto => cadaObjeto._id);
-    document.getElementById('retrieved').innerText = 'Response from the DB: ' + respuestaParseada.join(', ');
+    const parsedResponse = response.msgOk.map(eachObject => eachObject._id);
+    document.getElementById('retrieved').innerText = 'Response from the DB: ' + parsedResponse.join(', ');
   });
   
   document.getElementById('btnGoGetIt').setAttribute('hidden', true);

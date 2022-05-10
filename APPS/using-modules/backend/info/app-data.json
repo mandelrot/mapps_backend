@@ -1,4 +1,4 @@
 {
   "appFullName": "03 - Using Node modules",
-  "appDescription": "Your frontend app can use modules located in the frontend apps folders (via internal.js or external.js), but the backend offers some public utilities too and they can be directly invoked from the browser frontend page. Here you will see an example of both ways of doing that."
+  "appDescription": "Your frontend app can use modules located in the frontend apps folders (via internal.js or external.js), but the backend offers some public utilities too wich they can be directly invoked from the frontend, including the browser page. Here you will see an example of both ways of doing that."
 }
