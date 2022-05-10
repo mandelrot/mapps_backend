@@ -1,10 +1,6 @@
 
 
-const path = require('path');
-
-// We could also import "fs-extra" from the backend. It does the same
-// with some extra functions - https://www.npmjs.com/package/fs-extra
-
+const path = require('path'); // The server will execute this code, so this is a Node environment
 
 
 

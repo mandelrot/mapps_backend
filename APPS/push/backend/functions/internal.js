@@ -4,6 +4,7 @@
 const myFunctions = {};
 
 
+// IMPORTANT:
 // In order to be able to trigger push events this module needs to access the frontend socket package
 // to send push messages to the server (and then make them be broadcasted). We need to use the socket
 // sent from the backend with this purpose, imported with the function below:

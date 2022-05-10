@@ -1,5 +1,5 @@
 
-const path = require('path');
+const path = require('path'); // We can do this since this will be executed by the backend (Node)
 
 const routeToDB = path.join(__dirname, 'my-db-folder');
 
@@ -64,7 +64,7 @@ module.exports = db;
 
 const PouchDB = require('pouchdb-node');
 const routeToDB = 'mydb'; // You should replace this for the path where your files will be located
-const db = new PouchDB(routeToDB, {auto_compaction: true});
+const db = new PouchDB(routeToDB, {auto_compaction: true}); // auto_compaction is important! See PouchDB docs
 
 db.put({_id: 'foo', version: 1}).then(function () {
   return db.get('foo');
