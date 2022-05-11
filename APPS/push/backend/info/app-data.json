@@ -1,0 +1,4 @@
+{
+  "appFullName": "04 - Broadcasting push notifications",
+  "appDescription": "Your backend functions can trigger events who may be listened not only by your own frontend app but everyone connected (other frontend apps too). Two types of messages are available: reloading data (forget about needing to refresh the page) and logging out users. See how here."
+}

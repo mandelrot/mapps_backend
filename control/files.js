@@ -74,9 +74,11 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
         for (const fileInInfoFolder of filesInInfoFolder) {
           if (fileInInfoFolder.includes('app-icon')) { iconfound = fileInInfoFolder; }
         }
-        // Ensure frontend icon will be there
+        // Ensure .js file with the port and frontend icon will be there
         backendStaticPath = path.join(routeToAppsFolder, validApp, 'app', 'backend-static');
         await fs.ensureDir(backendStaticPath);
+        await fs.ensureFile(path.join(backendStaticPath, 'serverport.js'));
+        await fs.writeFile(path.join(backendStaticPath, 'serverport.js'), `const serverPort = ${config.server.PORT};`);
         if (iconfound) { 
           await fs.copyFile(path.join(infoFolder, iconfound), path.join(backendStaticPath, iconfound));
           routeToAppIcon = `/${validApp}/${backendStaticDir}/${iconfound}`;
@@ -107,7 +109,7 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
         }
         appsStateData.push(eachValidApp);
       } catch (error) {
-        // If something is not 100% ok with the app it will be ignored
+        // If something is not 100% ok with the app it will just be ignored
       }
     }
     await fs.writeFile(routeToAppsStateFile, encryption.cipher(JSON.stringify(appsStateData)));

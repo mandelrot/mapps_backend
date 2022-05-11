@@ -1,20 +1,26 @@
 
-const path = require('path');
-
-const PouchDB = require('pouchdb-node'); // Already installed in the backend
-                                         // See a full basic example at /utils/pouchdb.js
-  // Docs: https://www.npmjs.com/package/pouchdb-node
-        // https://pouchdb.com
+const path = require('path'); // We can do this since this will be executed by the backend (Node)
 
 const routeToDB = path.join(__dirname, 'my-db-folder');
-const myDB = new PouchDB(routeToDB, {auto_compaction: true});
-  // Please note: PouchDB works with versions kept forever (same as Git for example). This leads
-  // to an exponential db grouth, but can be avoided with the "auto-compaction" option which
-  // makes it work as a standard DB keeping only the most recent changes and a minimal size.
 
 
 
 const db = {};
+
+
+// PouchDB Docs: https://www.npmjs.com/package/pouchdb-node
+// https://pouchdb.com
+let PouchDB;
+let myDB;
+db.importDB = (db) => { // In this example internal.js will bring it here
+  if (!PouchDB || !myDB) { 
+    PouchDB = db;
+    myDB = new PouchDB(routeToDB, {auto_compaction: true});
+    // Please note: PouchDB works with versions kept forever (same as Git for example). This leads
+    // to an exponential db grouth, but can be avoided with the "auto-compaction" option which
+    // makes it work as a standard DB keeping only the most recent changes and a minimal size.
+  }
+}
 
 
 db.store = async (data) => {
@@ -58,7 +64,7 @@ module.exports = db;
 
 const PouchDB = require('pouchdb-node');
 const routeToDB = 'mydb'; // You should replace this for the path where your files will be located
-const db = new PouchDB(routeToDB, {auto_compaction: true});
+const db = new PouchDB(routeToDB, {auto_compaction: true}); // auto_compaction is important! See PouchDB docs
 
 db.put({_id: 'foo', version: 1}).then(function () {
   return db.get('foo');

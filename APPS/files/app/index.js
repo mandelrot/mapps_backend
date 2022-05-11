@@ -1,5 +1,5 @@
 
-const socket = io(`http://127.0.0.1:3000`);
+const socket = io(`http://127.0.0.1:${serverPort}`); // Coming from /backend-static/serverport.js
 
 
 // Please note: this is just a way I have figured out to do the job, you can
