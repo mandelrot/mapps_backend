@@ -8,9 +8,13 @@ You can use the modules already existing in this folder as a format
 example, and anyway you'll find all the info in the docs.
 
 
-Note: the "encryption.js" module will also be sent by Control to the
-internal/external frontend functions, so they can access the same module
-(and therefore the same password) to encrypt/decript information and then
-make the encryption compatible with other elements that use this same 
-module. They may use their own, it's just in case the developers decide
-to have an encryption coherence in all the suite.
+Important note about "encryption.js": when you use an encryption module
+you need to stablish a password on which the encryption will be based.
+If you encrypt something with a password you have to decrypt it with the
+same password, or it will not work. 
+You can use the backend encryption module located in this folder, or put
+one in your frontend app and use that to work (it's a developer's choice
+between consistency with the whole system or modularity and independence
+of your frontend app). But if your frontend module has a different
+password than the backend one, you will need to get sure everything is
+done with the same tool.

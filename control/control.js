@@ -16,13 +16,15 @@ function setBackendInfo () {
   backendInfo = {
     socketPort: config.server.port,
     modules: {
-      // Node packages present in package.json that will be availale 
-      PouchDB: require('pouchdb-node'),
-      fs: require('fs-extra'),
-      cron: require('node-cron'),
+      // Node packages present in package.json
+      PouchDB: require('pouchdb-node'), // In-file database
+      fs: require('fs-extra'), // Like the standard Node fs, but with more functions
+      cron: require('node-cron'), // Scheduled tasks
+      nodemailer: require('nodemailer'), // Email client
       // Other elements 
       encryption: require(path.join(__dirname, '..', 'utils', 'public', 'encryption.js')),
-      socket: io(`http://127.0.0.1:${config.server.PORT}`) // push notifications
+        // Important! read the readme in utils/public about the encryption backend module
+      socket: io(`http://127.0.0.1:${config.server.PORT}`) // To use in push notifications
     }
   }; 
 };
