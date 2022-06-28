@@ -15,9 +15,10 @@
 
   <div id="container" 
     class="max-w-3xl mx-auto px-2"
-    x-data="{msgOk: false, msgError: false, checkingApps: true, apps: []}" 
+    x-data="{msgOk: false, msgError: false, checkingApps: true, apps: [], idControlApp: false}" 
     x-on:appslist.window="apps = $event.detail.apps"
     x-on:updatecheckingapps.window="checkingApps = $event.detail.checkingApps"
+    x-on:setidcontrolapp.window="idControlApp = $event.detail.idControlApp"
     x-on:msg.window="msgOk = $event.detail.msgOk || false; msgError = $event.detail.msgError || false">
 
 
@@ -96,12 +97,101 @@
                           x-model:checked="app.appEnabled" >
                       </div>
                       <div class="flex space-x-2">
-                        <img :src="app.appAdminIcon" class="w-8">
+                        <img :src="app.appAdminIcon" class="w-8 h-8">
                         <div class="flex-auto p-1" x-text="app.appFullName"></div>
                       </div>
                     </div>
                   </template>
                 </div>
+
+
+                <!-- ID control app -->
+                <div class="pt-8 pb-16">
+                  <h1 class="text-2xl mb-2">Set ID control app</h1>
+                  <p class="text-gray-400 mb-2">
+                    If you have an app capable of doing users validation, you can tell the system to check the identity of who is calling (via token, see docs) before executing any required task.
+                  </p>
+                  <p class="mb-8">Important: <span class="text-gray-400">you are allowed to set a ID control app that is not active in the apps list. If you do so, your app will be used only for this checking purpose and nothing else.</span></p>
+
+                  <!-- Dropdown block -->
+                  <div class="pl-4 relative inline-block text-left">
+
+                    <!-- Active app registry (keeping track of it outside the Alpine context) -->
+                    <div id="idControlApp" class="hidden" x-html="idControlApp ? idControlApp : ''"></div>
+
+                    <!-- Button -->
+                    <div onclick="toggleActiveAppsList()">
+                      <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-0" aria-expanded="true" aria-haspopup="true">
+                        <span id="dropdownAppsButtonContent" 
+                          x-text="setIDControlAppButtonText(JSON.stringify(apps), idControlApp)"
+                          ></span>
+                        <!-- Heroicon name: solid/chevron-down -->
+                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div><!-- End of button -->
+
+                    <!-- Dropdown background (just to make it close when clicking outside) -->
+                    <div id="dropdownAppsBackground" onclick="toggleActiveAppsList()" class="fixed top-0 bottom-0 left-0 right-0 hidden"></div><!-- End of dropdown background -->
+
+
+                    <!-- Dropdown -->
+                    <div id="dropdownAppsList" class="origin-top-right absolute left-4 mt-2 w-96 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden divide-y divide-gray-100" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                      
+                      <div class="py-1" role="none">
+                        <div class="text-gray-700 block px-4 py-2 text-sm select-none hover:border-red-800 border-transparent rounded border-2" role="menuitem" tabindex="1" x-on:click="setIDControlApp('')">
+                          -- No ID control app --
+                        </div>
+                      </div>
+                      <div class="py-1" role="none">
+                        <template x-for="app in apps" :key="app.appFolder">
+                          <div class="text-gray-700 block px-4 py-2 text-sm select-none hover:border-red-800 border-transparent rounded border-2" role="menuitem" tabindex="1" x-on:click="setIDControlApp(app.appFolder)">
+                            <div class="flex space-x-2">
+                              <img :src="app.appAdminIcon" class="w-6 h-6">
+                              <div class="flex-auto p-1" x-text="app.appFullName"></div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                        
+                    </div><!-- End of dropdown -->
+
+                  </div><!-- End of dropdown block -->
+
+
+                  <!-- Exceptions list -->
+                  <template x-if="idControlApp">
+                    <div class="ml-8">
+                      <h3 class="text-lg mt-4 mb-2">Exceptions</h3>
+                      <p class="text-gray-400 mb-2">
+                        (In case you want some of your apps to be used without token checking)
+                      </p>
+                      
+
+                      <template x-for="app in apps" :key="app.appFolder">
+                        <div class="flex my-6">
+                          <div class="flex-none mr-2 pt-1 pb-1 px-4">
+                            <input 
+                              :id="'idException_' + app.appFolder"
+                              class="idException accent-red-800"
+                              type="checkbox" 
+                              x-model="app.idException" >
+                          </div>
+                          <div class="flex space-x-2">
+                            <img :src="app.appAdminIcon" class="w-6 h-6">
+                            <div class="flex-auto p-1" x-text="app.appFullName"></div>
+                          </div>
+                        </div>
+                      </template>
+
+                    </div>
+                  </template><!-- End of exceptions list -->
+
+
+                </div><!-- End of ID control app -->
+
+
                 <div class="border-2 border-red-800 mt-4 p-2 text-red-800 select-none rounded text-center">
                   <span class="font-bold">Warning:</span> once you confirm the changes 
                   the effects will take inmediate effects. 
@@ -111,7 +201,7 @@
                 <div class="flex justify-end">
                   <button id="buttonConfirmApps"
                       class="bg-red-800 hover:bg-red-700 text-white font-bold my-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline flex" 
-                      onclick="updateAppsStatus()">
+                      x-on:click="updateAppsStatus(JSON.stringify(apps), idControlApp)">
                     <svg id="adminSpinnerLogin" class="animate-spin h-6 w-6 mr-3 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
