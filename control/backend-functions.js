@@ -74,6 +74,31 @@ backend.checkAppInAppsState = async (appFolder) => { // Returns appRoutingType o
   }
 }
 
+backend.checkIDControlStatus = async () => {
+  let appsState;
+  if (appsStateInMemory) {
+    appsState = { result: appsStateInMemory };
+  } else {
+    appsState = await files.getAppsState();
+    if (appsState.result && !appsState.msgError) {
+      appsStateInMemory = appsState.result;
+    } else {
+      appsStateInMemory = false;
+      return { msgError: `There has been an error when checking the ID control status of the system (which app determines who you are and whether you have permission to do what you want to do). Please contact your system admin and transmit them this exact message so they can try to find what has happened.
+
+This is the error found when checking the apps list and their ID control settings: 
+
+${appsState.msgError || 'No info available. If the problem persists, maybe accessing the admin area in the server and resetting all data will solve it.'}` };
+    }
+  }
+  const apps = JSON.parse(JSON.stringify(appsStateInMemory));
+  let idControlApp = apps.find( app => app.idControlApp === true );
+  if (!idControlApp) { return { result: {idControlApp: false} } }
+  idControlApp = idControlApp.appFolder;
+  let idExceptions = apps.filter( app => app.idException === true ).map( app => app.appFolder );
+  return { result: { idControlApp, idExceptions } };
+}
+
 backend.checkAppFile = async (routeArray) => {
   return await files.checkAppFile(routeArray);
 }

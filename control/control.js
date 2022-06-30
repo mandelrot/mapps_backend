@@ -146,7 +146,7 @@ control.msgFromApp = async (incomingMessage) => {
       message = 
         typeof incomingMessage === 'object' && !Array.isArray(incomingMessage) ? incomingMessage 
         : JSON.parse(incomingMessage);
-    } catch (error) { // It should be a string that can be JSON-parsed
+    } catch (error) { // If it's a string it should be JSON-parseable
       message = {data:{}};
       throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${incomingMessage}`);
     }
@@ -160,6 +160,9 @@ control.msgFromApp = async (incomingMessage) => {
     // Both the origin app and targeted app must be present and enabled
     if (!await backend.isAppEnabled(message.app)) { return; }
     if (!await backend.isAppEnabled(message.to)) { return; }
+    // If the admin has set an ID control app, here is where it's done
+    
+
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
