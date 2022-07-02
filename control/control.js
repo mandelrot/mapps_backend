@@ -161,8 +161,20 @@ control.msgFromApp = async (incomingMessage) => {
     if (!await backend.isAppEnabled(message.app)) { return; }
     if (!await backend.isAppEnabled(message.to)) { return; }
     // If the admin has set an ID control app, here is where it's done
-    
+    const idControlStatus = await backend.checkIDControlStatus();
+      if ( !idControlStatus || (!idControlStatus.result && !idControlStatus.msgError) ) { 
+        throw 'When a frontend app wants to do something (calling the backend) there is an ID control of who is calling (via token). There is a function called "backend-functions.js --> checkIDControlStatus() that reads the admin settings about it and returns either the settings list or a msgError (one of the two). In this case it has returned: ' + (typeof idControlStatus === 'object' ? JSON.stringify(idControlStatus) : idControlStatus);
+      } else if (idControlStatus.msgError) {
+        throw idControlStatus.msgError;
+      }
+    const idControlSettings = idControlStatus.result; // Just to make it clear
+      let idControlOk = false;
+      if (!idControlSettings.idControlApp || (Array.isArray(idControlSettings.idExceptions) && idControlSettings.idExceptions.includes(message.app)) ) { idControlOk = true; }
+    if (!idControlOk) {
 
+      console.log ('Here is where we do the token checking'); // TO DO NEXT
+
+    }
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
