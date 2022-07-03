@@ -131,6 +131,7 @@ To make frontend development easier, this is the communication standard suggeste
     action: 'functionToInvoke', 
     data: { 
       params: ['param1', 'param2'] // Will be passed to the invoked function, the content of the array can be anything
+      token: 'Optional. only if the admin enables ID control (see docs)'
     }
   }
   Response object: { // The object to return should have only one of the two messages
@@ -167,13 +168,18 @@ control.msgFromApp = async (incomingMessage) => {
       } else if (idControlStatus.msgError) {
         throw idControlStatus.msgError;
       }
-    const idControlSettings = idControlStatus.result; // Just to make it clear
+    const idControlSettings = idControlStatus.result;
       let idControlOk = false;
       if (!idControlSettings.idControlApp || (Array.isArray(idControlSettings.idExceptions) && idControlSettings.idExceptions.includes(message.app)) ) { idControlOk = true; }
-    if (!idControlOk) {
-
-      console.log ('Here is where we do the token checking'); // TO DO NEXT
-
+    if (!idControlOk) { // Here is where the ID control is done
+      if (!message.data.token || typeof message.data.token !== 'string') { return { idControlFailed: true }; }
+      // Checking the app contains the id control file and function to do the ckecking
+      const idControlFunctionFile = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, idControlSettings.idControlApp, 'backend', 'functions', 'idcontrol.js'));
+      if (!idControlFunctionFile || !idControlFunctionFile.checkId || typeof idControlFunctionFile.checkId !== 'function') { 
+        throw 'Your system admin has set an ID control app that does not includes the required tools to do that. Please contact them so they can check the system ID control settings.' 
+      }
+      const checkIdFunctionResponse = await idControlFunctionFile.checkId(message.data.token);
+      if (checkIdFunctionResponse !== true) { return { idControlFailed: true }; }
     }
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
