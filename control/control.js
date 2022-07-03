@@ -131,6 +131,7 @@ To make frontend development easier, this is the communication standard suggeste
     action: 'functionToInvoke', 
     data: { 
       params: ['param1', 'param2'] // Will be passed to the invoked function, the content of the array can be anything
+      token: 'Optional. only if the admin enables ID control (see docs)'
     }
   }
   Response object: { // The object to return should have only one of the two messages
@@ -146,7 +147,7 @@ control.msgFromApp = async (incomingMessage) => {
       message = 
         typeof incomingMessage === 'object' && !Array.isArray(incomingMessage) ? incomingMessage 
         : JSON.parse(incomingMessage);
-    } catch (error) { // It should be a string that can be JSON-parsed
+    } catch (error) { // If it's a string it should be JSON-parseable
       message = {data:{}};
       throw(`The message received in the backend to redirect does not have a valid format. This is the message received: ${incomingMessage}`);
     }
@@ -160,6 +161,26 @@ control.msgFromApp = async (incomingMessage) => {
     // Both the origin app and targeted app must be present and enabled
     if (!await backend.isAppEnabled(message.app)) { return; }
     if (!await backend.isAppEnabled(message.to)) { return; }
+    // If the admin has set an ID control app, here is where it's done
+    const idControlStatus = await backend.checkIDControlStatus();
+      if ( !idControlStatus || (!idControlStatus.result && !idControlStatus.msgError) ) { 
+        throw 'When a frontend app wants to do something (calling the backend) there is an ID control of who is calling (via token). There is a function called "backend-functions.js --> checkIDControlStatus() that reads the admin settings about it and returns either the settings list or a msgError (one of the two). In this case it has returned: ' + (typeof idControlStatus === 'object' ? JSON.stringify(idControlStatus) : idControlStatus);
+      } else if (idControlStatus.msgError) {
+        throw idControlStatus.msgError;
+      }
+    const idControlSettings = idControlStatus.result;
+      let idControlOk = false;
+      if (!idControlSettings.idControlApp || (Array.isArray(idControlSettings.idExceptions) && idControlSettings.idExceptions.includes(message.app)) ) { idControlOk = true; }
+    if (!idControlOk) { // Here is where the ID control is done
+      if (!message.data.token || typeof message.data.token !== 'string') { return { idControlFailed: true }; }
+      // Checking the app contains the id control file and function to do the ckecking
+      const idControlFunctionFile = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, idControlSettings.idControlApp, 'backend', 'functions', 'idcontrol.js'));
+      if (!idControlFunctionFile || !idControlFunctionFile.checkId || typeof idControlFunctionFile.checkId !== 'function') { 
+        throw 'Your system admin has set an ID control app that does not includes the required tools to do that. Please contact them so they can check the system ID control settings.' 
+      }
+      const checkIdFunctionResponse = await idControlFunctionFile.checkId(message.data.token);
+      if (checkIdFunctionResponse !== true) { return { idControlFailed: true }; }
+    }
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));

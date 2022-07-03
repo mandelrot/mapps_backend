@@ -100,11 +100,13 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
           appRoutingType
         }
         if (!eachValidApp.appFullName || !eachValidApp.appLink) { throw error; } 
-        // Sync enabled state with appState file
+        // Sync enabled state and ID control app status with appState file
         for (const statedApp of appsState) {
           if (statedApp.appFolder === eachValidApp.appFolder && 
               statedApp.appFullName === eachValidApp.appFullName) { // The app is already registered
               eachValidApp.appEnabled = statedApp.appEnabled;
+              eachValidApp.idControlApp = statedApp.idControlApp;
+              eachValidApp.idException = statedApp.idException;
           }
         }
         appsStateData.push(eachValidApp);
