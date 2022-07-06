@@ -171,6 +171,7 @@ control.msgFromApp = async (incomingMessage) => {
     const idControlSettings = idControlStatus.result;
       let idControlOk = false;
       if (!idControlSettings.idControlApp || (Array.isArray(idControlSettings.idExceptions) && idControlSettings.idExceptions.includes(message.app)) ) { idControlOk = true; }
+    let checkIdFunctionResponse;
     if (!idControlOk) { // Here is where the ID control is done
       if (!message.data.token || typeof message.data.token !== 'string') { return { idControlFailed: true }; }
       // Checking the app contains the id control file and function to do the ckecking
@@ -178,15 +179,17 @@ control.msgFromApp = async (incomingMessage) => {
       if (!idControlFunctionFile || !idControlFunctionFile.checkId || typeof idControlFunctionFile.checkId !== 'function') { 
         throw 'Your system admin has set an ID control app that does not includes the required tools to do that. Please contact them so they can check the system ID control settings.' 
       }
-      const checkIdFunctionResponse = await idControlFunctionFile.checkId(message.data.token);
-      if (checkIdFunctionResponse !== true) { return { idControlFailed: true }; }
+      checkIdFunctionResponse = await idControlFunctionFile.checkId(message.data.token);
+      if (!checkIdFunctionResponse) { return { idControlFailed: true }; }
     }
+    let messageParams = JSON.parse(JSON.stringify(message.data.params));
+    messageParams = messageParams.map( param => param === 'idFromToken' ? checkIdFunctionResponse : param );
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
     if (functions.importBackendInfo) { functions.importBackendInfo(backendInfo); }
     // Execute the function said in "action", passing the "data --> params" object as argument
-    const whatTargetedFunctionReturns = await functions[message.action](...message.data.params);
+    const whatTargetedFunctionReturns = await functions[message.action](...messageParams);
     // return what the function returns
     return whatTargetedFunctionReturns;
   } catch (error) {
