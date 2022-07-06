@@ -109,7 +109,7 @@
                 <div class="pt-8 pb-16">
                   <h1 class="text-2xl mb-2">Set ID control app</h1>
                   <p class="text-gray-400 mb-2">
-                    If you have an app capable of doing users validation, you can tell the system to check the identity of who is calling (via token, see docs) before executing any required task.
+                    If you have an app capable of doing users validation, you can tell the system to check the identity of who is calling (via token, see docs) before executing any required task. The dropdown button list below will display which apps currently installed can do that so you can select what you want.
                   </p>
                   <p class="mb-8">Important: <span class="text-gray-400">you are allowed to set a ID control app that is not active in the apps list. If you do so, your app will be used only for this checking purpose and nothing else.</span></p>
 
@@ -146,12 +146,14 @@
                       </div>
                       <div class="py-1" role="none">
                         <template x-for="app in apps" :key="app.appFolder">
-                          <div class="text-gray-700 block px-4 py-2 text-sm select-none hover:border-red-800 border-transparent rounded border-2" role="menuitem" tabindex="1" x-on:click="setIDControlApp(app.appFolder)">
-                            <div class="flex space-x-2">
-                              <img :src="app.appAdminIcon" class="w-6 h-6">
-                              <div class="flex-auto p-1" x-text="app.appFullName"></div>
+                          <template x-if="app.idControlCapable">
+                            <div class="text-gray-700 block px-4 py-2 text-sm select-none hover:border-red-800 border-transparent rounded border-2" role="menuitem" tabindex="1" x-on:click="setIDControlApp(app.appFolder)">
+                              <div class="flex space-x-2">
+                                <img :src="app.appAdminIcon" class="w-6 h-6">
+                                <div class="flex-auto p-1" x-text="app.appFullName"></div>
+                              </div>
                             </div>
-                          </div>
+                          </template>
                         </template>
                       </div>
                         
