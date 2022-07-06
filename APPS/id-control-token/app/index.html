@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
-  <title>Utils example</title>
+  <title>ID control via token</title>
 </head>
 <body style="padding: 40px;">
 
@@ -38,7 +38,7 @@
   <h3 style="margin-bottom: 40px;">Let's test it</h3>
 
 
-  <p>Press the button to send a request without token (or it would be the same with an invalid token). If the admin settings are stablished as listed above the request will fail, otherwise the text below the button will change.</p>
+  <p>Press the button to send a request without token (or it would be the same with an invalid token). If the admin settings are stablished as listed above the request will fail, otherwise the text below the button will show the backend response even without any proper identification.</p>
   <button onclick="sendWithoutToken()">Send without token</button><br/>
   <pspan id="responseWithoutToken">The backend response will be displayed here (if the ID control settings are correctly activated it should be an ID failure response).</pspan>
 

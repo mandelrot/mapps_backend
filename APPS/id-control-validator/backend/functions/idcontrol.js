@@ -6,8 +6,8 @@ const idControl = {}; // You could name the object as you want
 
 idControl.checkId = (token) => {
   // Your logic here (encryption, DB checking)
-  // The validation will be accepted only if this function returns true, any other case would be taken as negative
-  return token === '123' ? true: false;
+  // The validation should be resolved returning something that can be evaluated as positive, otherwise it will fail
+  return token === '123' ? 'John Doe' : false;
 }
 
 module.exports = idControl;

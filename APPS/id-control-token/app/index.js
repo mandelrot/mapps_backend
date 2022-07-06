@@ -26,7 +26,8 @@ function sendWithToken () {
     to: 'id-control-token',
     action: 'getResponse',
     data: {
-      params: ['not used in this example'],
+      params: ['randomParam1', 'randomParam2', 'idFromToken', 'randomParam3'], 
+        // If an 'idFromToken' param is present, it will be replaced by the result of the backend identification
       token: '123' // NEEDED IF THE ADMIN HAS SET THE ID CONTROL
     }
   }
