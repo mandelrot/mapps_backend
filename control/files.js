@@ -60,6 +60,7 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
     let iconfound = false;
     let backendStaticDir = 'backend-static'; // Will be created inside each frontend app "app" subfolder, to store app icon
     let backendStaticPath = '';
+    let idControlCapable;
     let appRoutingType; // By default, could be "managedByFrontendApp"
     for (const validApp of validApps) {
       try {
@@ -101,6 +102,8 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
         }
         if (!eachValidApp.appFullName || !eachValidApp.appLink) { throw error; } 
         // Sync enabled state and ID control app status with appState file
+        idControlCapable = await fs.pathExists(path.join(routeToAppsFolder, validApp, 'backend', 'functions', 'idcontrol.js'));
+        eachValidApp.idControlCapable = idControlCapable;
         for (const statedApp of appsState) {
           if (statedApp.appFolder === eachValidApp.appFolder && 
               statedApp.appFullName === eachValidApp.appFullName) { // The app is already registered

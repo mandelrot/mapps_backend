@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A little css touch just to make it look less ugly -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.4.5/spectre.min.css">
+  <title>Minimal app</title>
+</head>
+<body style="padding: 40px;">
+
+  <h2>Token validation app</h2>
+  
+  <p>
+    The v2 of the Mandelrot Apps engine includes a built-in validation system (typical usecase: users). In the first version the backend just redirected the messages among apps, then if you wanted some user validation you should do it AFTER the message was delivered (the targeted app would ask someone else "who is this guy asking me for this"); now the validation is doing BEFORE the delivery, the admin sets which app will be used to do this (if any) and then the backend will ask before redirecting. So the system gets a little bit less abstract, but a lot more useful in real life.
+  </p>
+
+
+  <p style="margin-top: 40px;">
+    The admin can decide to set no default validation app (then the engine will work just as in v1) and they can also set exceptions (which apps will not be controlled, if any). On the other hand, the designated ID control doesn't need to be an enabled app; normally it will (an 'Users' app or similar, where users will register and so on), but it's not obligatory. So you could have an app not enabled, and therefore not accesible by the users, but still functional just for this purpose.
+  </p>
+
+  <p style="margin-top: 40px;">
+  The only requirement to work as system default ID control app is having a "idcontrol.js" module in your app functions folder (/backend/functions) with a "checkId" function. If so, the admin engine will recognize it and display in your ID control app dropdown to be selected at will.
+  </p>
+
+</body>
+</html>
