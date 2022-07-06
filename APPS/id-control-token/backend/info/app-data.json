@@ -1,0 +1,4 @@
+{
+  "appFullName": "07 - ID control - App with token",
+  "appDescription": "Example on how to use the automatic ID control set by the backend: this app sends a token when requesting something, so another app (designated by the admin) can check it and validate (or not) the ID of who is calling before redirecting the petition to the targeted app."
+}

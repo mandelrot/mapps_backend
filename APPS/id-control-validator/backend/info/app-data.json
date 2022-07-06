@@ -1,0 +1,4 @@
+{
+  "appFullName": "08 - ID control - Validator",
+  "appDescription": "Example on how to use the automatic ID control set by the backend: this app is capable of doing tokens validation (so the admin can set it as ID control app) even when it's not enabled at the admin window so the users can not see it. In real world there should be an Users App that could also do this job, but the purpuse of this is to give you a minimal example on how it works."
+}
