@@ -1,5 +1,5 @@
 /*
-This module is required by the backend if the app is designated by the admin as a valid 
+This module is required by the backend if the app is designated by the admin as a valid ID control app
 */
 
 const idControl = {}; // You could name the object as you want
