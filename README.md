@@ -13,7 +13,7 @@ The ERPs in the market have many advantages, but some downsides too: your compan
 
 Mandelrot Apps is not a set of corporate programs, but the engine that makes possible the environment where your corporate apps (tailor-made by your development team) will work together. With this tool, made for medium-size organizations (a few hundreds of users will be no problem, and the server will sure be able to easily handle many more) you can have all the advantages of an ERP, while keeping your information private and under control. This code is free to use and modify, so you can customize it and adapt it to your business needs at will.
 
-But what makes this software totally different than others is its revolutionary internal arquitecture (see the explanation in the [overview document](https://mega.nz/file/efBFVD7Y#GscQkTau4MmSsa_yPVY4GBTJeE7ABN3TzmG54RQur2w) to understand how unique it is). The concept gives it its two most unique features: modularity and portability. Maintenance, backups and migrations are as simple as copying a folder, and frontend development can be done at lightspeed.
+But what makes this software totally different than others is its revolutionary internal arquitecture (see the explanation in the [overview document](https://github.com/mandelrot/mapps_backend/blob/master/DOCS/docs1-overview.pdf) to understand how unique it is). The concept gives it its two most unique features: modularity and portability. Maintenance, backups and migrations are as simple as copying a folder, and frontend development can be done at lightspeed.
 
 <br>
 
