@@ -45,10 +45,23 @@ And you can enable/disable the apps for your employes at will. The changes (all 
 
 The software has a ton of functionalities, utilities and details specially conceived to give your company an optimized workflow and all the control over your information and the tools your employees use. Internally, your IT team will love how it is designed focusing on making their job easier. And you will have all the profits of having your own apps being supported by an engine your people can easily understand, modify and customize to your needs.
 
+
+
+<br/><br/>
+
+<b>New in version 2:</b> ID control available from the backend (using tokens). Now the engine detects which ones of your apps can do ID validations, then the sysadmin can set one of them as default, and they can even set exceptions to that control. Your IT staff will love the way this makes their job easier and better.
+
+<br>
+<div align="center">
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgG60twQS4EVQFyw9u11qa3UydQ69I4lwCBGvqHuOSiiQWGRgHvFupkDKsgSJ1tiOXhdRA9fFfa7X0qZJNv20YskvyD2os9M7oU7OfqCseVP5Wcjpc6U5Ru-ktvZfAZwW-s26TjrOPO4pW71sCfYKyCyCpVVQPnhjqfztvmm4i7JuL_hsovp7cX-ntq/s1600/id-readme.png" width="80%"/>
+</div>
+
+<br/><br/><br/>
+
 You have all the guides [in the DOCS folder](https://github.com/mandelrot/mapps_backend/tree/master/DOCS) of the code at the top of this page. Also, if you want to test a demo package with some basic apps just to show you how it works, you can download one of the two available versions of it: 
 
-Linux: [https://mega.nz/file/LOoTjTyD#XFhHi9OMaOgTS9BAa1pVeK0_y8cl9iG7SIy7scIQfOk](https://mega.nz/file/LOoTjTyD#XFhHi9OMaOgTS9BAa1pVeK0_y8cl9iG7SIy7scIQfOk)<br>
-Windows: [https://mega.nz/file/uSICnAJJ#ZmNro9QnS7ovITT3RLDJgyNk5V6zJtjW6fW7CzNeWx8](https://mega.nz/file/uSICnAJJ#ZmNro9QnS7ovITT3RLDJgyNk5V6zJtjW6fW7CzNeWx8)
+Linux: [https://mega.nz/file/aCJBFAIb#zBhfZ6n-hAjjFBEVHkgXhW-pRWR1-aHNXFdQiDFFu2Y](https://mega.nz/file/aCJBFAIb#zBhfZ6n-hAjjFBEVHkgXhW-pRWR1-aHNXFdQiDFFu2Y)<br>
+Windows: [https://mega.nz/file/6G4GFaTR#kBVGAEySJwHxPxv60uNhg2JY31p41a_HgTIgB6NFjDc](https://mega.nz/file/6G4GFaTR#kBVGAEySJwHxPxv60uNhg2JY31p41a_HgTIgB6NFjDc)
 
 IMPORTANT: these packages are just for demo purposes. If you want to use this software in a real corporate environment you should follow the sysadmin guide steps and generate your own custom package with your own settings and passwords. In any case, by using any of my code or software you do it fully under your own responsibility.
 
