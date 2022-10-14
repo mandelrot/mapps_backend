@@ -96,6 +96,7 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
           appIcon: routeToAppIcon,
           appAdminIcon: routeToAdminIcon,
           appEnabled: false,
+          appHidden: false,
           appLink: indexHtmlExists ? webPathToIndexHtml : false,
           appDescription: eachMetadata.appDescription || '',
           appRoutingType
@@ -108,6 +109,7 @@ files.getAppsInstalled = async () => { // Each app should correspond to a folder
           if (statedApp.appFolder === eachValidApp.appFolder && 
               statedApp.appFullName === eachValidApp.appFullName) { // The app is already registered
               eachValidApp.appEnabled = statedApp.appEnabled;
+              eachValidApp.appHidden = statedApp.appHidden;
               eachValidApp.idControlApp = statedApp.idControlApp;
               eachValidApp.idException = statedApp.idException;
           }

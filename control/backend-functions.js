@@ -37,6 +37,7 @@ backend.updateAppsList = async (updatedApps) => {
       if (app.appFolder === updatedApp.appFolder &&
           app.appFullName === updatedApp.appFullName) { 
         app.appEnabled = updatedApp.appEnabled; 
+        app.appHidden = updatedApp.appHidden; 
         app.idControlApp = updatedApp.idControlApp;
         app.idException = updatedApp.idException;
       }
