@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.1.4 | MIT License | https://tailwindcss.com
+! tailwindcss v3.1.8 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -355,13 +355,6 @@ input::-moz-placeholder, textarea::-moz-placeholder {
   /* 2 */
 }
 
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  opacity: 1;
-  /* 1 */
-  color: #9ca3af;
-  /* 2 */
-}
-
 input::placeholder,
 textarea::placeholder {
   opacity: 1;
@@ -667,6 +660,10 @@ video {
   margin-top: 0.5rem;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
 .mb-8 {
   margin-bottom: 2rem;
 }
@@ -697,10 +694,6 @@ video {
 
 .ml-5 {
   margin-left: 1.25rem;
-}
-
-.mt-12 {
-  margin-top: 3rem;
 }
 
 .block {
@@ -763,12 +756,20 @@ video {
   max-width: 48rem;
 }
 
+.flex-auto {
+  flex: 1 1 auto;
+}
+
 .flex-none {
   flex: none;
 }
 
-.flex-auto {
-  flex: 1 1 auto;
+.flex-grow {
+  flex-grow: 1;
+}
+
+.grow {
+  flex-grow: 1;
 }
 
 .origin-top-right {
@@ -799,8 +800,11 @@ video {
 .select-none {
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -971,6 +975,18 @@ video {
   padding-bottom: 0.25rem;
 }
 
+.pl-6 {
+  padding-left: 1.5rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
+}
+
 .pb-16 {
   padding-bottom: 4rem;
 }
@@ -1025,12 +1041,12 @@ video {
   line-height: 1.75rem;
 }
 
-.font-medium {
-  font-weight: 500;
-}
-
 .font-bold {
   font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
 }
 
 .text-red-800 {
