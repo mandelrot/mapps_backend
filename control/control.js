@@ -96,7 +96,7 @@ control.msgFromMain = async (message) => {
     case 'checkAppsList':
       const backendList = await backend.checkAppsList();
       const blist = backendList.result || [];
-      response.data.apps = blist.filter(app => app.appEnabled); 
+      response.data.apps = blist.filter(app => app.appEnabled && !app.appHidden); 
       for (const filteredApp of response.data.apps) { 
         delete filteredApp.appAdminIcon;
         delete filteredApp.appEnabled; 
