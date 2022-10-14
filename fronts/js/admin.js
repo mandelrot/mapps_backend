@@ -113,14 +113,19 @@ function uncheckIDControlExceptions() {
     try {
       const apps = JSON.parse(appsText);
       const checkboxApps = document.getElementsByClassName('checkboxApp');
+      const checkboxApps_hidden = document.getElementsByClassName('checkboxApp_hidden');
       const idExceptions = document.getElementsByClassName('idException');
       const updatedApps = [];
       let appObject;
       for (const app of apps) {
-        // Enabled status
         appObject = {appFolder: app.appFolder, appFullName: app.appFullName}
+        // Enabled status
         for (const checkboxApp of checkboxApps) {
           if (checkboxApp.id === app.appFolder) { appObject.appEnabled = checkboxApp.checked ? true : false; }
+        }
+        // Hidden status
+        for (const checkboxApp_hidden of checkboxApps_hidden) {
+          if (checkboxApp_hidden.id.slice(0, checkboxApp_hidden.id.indexOf('_hidden')) === app.appFolder) { appObject.appHidden = checkboxApp_hidden.checked ? true : false; }
         }
         // ID control status
         appObject.idControlApp = idControlApp === app.appFolder ? true : false;
