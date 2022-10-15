@@ -56,14 +56,25 @@ The software has a ton of functionalities, utilities and details specially conce
 <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgG60twQS4EVQFyw9u11qa3UydQ69I4lwCBGvqHuOSiiQWGRgHvFupkDKsgSJ1tiOXhdRA9fFfa7X0qZJNv20YskvyD2os9M7oU7OfqCseVP5Wcjpc6U5Ru-ktvZfAZwW-s26TjrOPO4pW71sCfYKyCyCpVVQPnhjqfztvmm4i7JuL_hsovp7cX-ntq/s1600/id-readme.png" width="80%"/>
 </div>
 
+<br/><br/>
+
+<b>New in version 3:</b> the frontent apps/modules now can be invisible to the end user, while fully functional and (with the full url) linkable themselves and their resources. This opens a whole new pattern design possible since now you can have components silently working in the background, without affecting the users experience.
+
+<br/>
+<div align="center">
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEivHjL7ktFrY5jmEdkoT0BjBFUj7USqgNUal43gzr7xkcDaL85LQZCRo-d6TPdymXzCKqjPfBqAibqvC4aRVMK7eY9a6f5B_qxB-LYb2ZZdC8ny3-7GuB4lYk1ZM0KJ9S-s4e3l6_zepGolPS1nd4jgGkeSWEn_u966f_5UoaSRXLeuBVutni2XCdBx/s1600/v3-1.png" width="80%"/>
+<br/>
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3c6X0MWSgOplzxGBkUNXelF6zv74gYVM7hjXeZ3avfOZ8BfnU_Be46CCQxSXVovFREkwPWm0n4hZC5XlsxWIXT23xgXtEKXCdbWCF6Aqw396z7ZxocZDF5kCbvAQpb5aaELT_fkUwca0BrOFqMQEDGy2KKfMwm4Svd1Fhq6yCNldSNQzWpsyhjbIg/s1600/v3-2.png" width="80%"/>
+</div>
+
 <br/><br/><br/>
 
 You have all the guides [in the DOCS folder](https://github.com/mandelrot/mapps_backend/tree/master/DOCS) of the code at the top of this page. Also, if you want to test a demo package with some basic apps just to show you how it works, you can download one of the two available versions of it: 
 
-Linux: [https://mega.nz/file/aCJBFAIb#zBhfZ6n-hAjjFBEVHkgXhW-pRWR1-aHNXFdQiDFFu2Y](https://mega.nz/file/aCJBFAIb#zBhfZ6n-hAjjFBEVHkgXhW-pRWR1-aHNXFdQiDFFu2Y)<br>
-Windows: [https://mega.nz/file/6G4GFaTR#kBVGAEySJwHxPxv60uNhg2JY31p41a_HgTIgB6NFjDc](https://mega.nz/file/6G4GFaTR#kBVGAEySJwHxPxv60uNhg2JY31p41a_HgTIgB6NFjDc)
+Linux: [https://mega.nz/file/mDA2XKDa#LDstDRHhwKL4ZDeawsZ0HqJpzNw8RWShiGqeknWbn4U](https://mega.nz/file/mDA2XKDa#LDstDRHhwKL4ZDeawsZ0HqJpzNw8RWShiGqeknWbn4U)<br>
+Windows: [https://mega.nz/file/OH4hRYZZ#VTm9bz8TFBrcVQrigDCDoSU5Ww08Nb-yTYnW1U3T3NU](https://mega.nz/file/OH4hRYZZ#VTm9bz8TFBrcVQrigDCDoSU5Ww08Nb-yTYnW1U3T3NU)
 
-IMPORTANT: these packages are just for demo purposes. If you want to use this software in a real corporate environment you should follow the sysadmin guide steps and generate your own custom package with your own settings and passwords. In any case, by using any of my code or software you do it fully under your own responsibility.
+IMPORTANT: these packages are just for demo purposes and THEY ARE NOT SECURED FOR PRODUCTION. If you want to use this software in a real corporate environment you should follow the sysadmin guide steps and generate your own custom package with your own settings and passwords. In any case, by using any of my code or software you do it fully under your own responsibility.
 
 <br>
 
