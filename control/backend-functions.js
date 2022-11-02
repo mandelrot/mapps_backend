@@ -47,6 +47,16 @@ backend.updateAppsList = async (updatedApps) => {
   return await files.updateAppsInstalled(apps);
 }
 
+backend.getAllAppsList = async() => {
+  let appsState;
+  if (appsStateInMemory) {
+    appsState = { result: appsStateInMemory };
+  } else {
+    appsState = await backend.checkAppsList();
+  }
+  return appsState;
+}
+
 backend.getEnabledAppsList = async () => {
   let appsState;
   if (appsStateInMemory) {

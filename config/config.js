@@ -8,6 +8,12 @@ PLEASE READ THE COMMENTS AND FOLLOW THE INSTRUCTIONS */
 config.PASSPHRASE = 'VERY IMPORTANT - YOU SHOULD CUSTOMIZE THIS TEXT BEFORE COMPILATION';
 // Please read the security note at the end of this file!
 
+config.msgMaxSize = 100; // In Megas - Be sure to have a numeric value here!
+// This limit will apply for the incoming messages. Bigger messages will be simply ignored. 
+// If you have more than one file in a message this number will apply to all of them together
+  // More info:  https://socket.io/docs/v4/server-options/#maxhttpbuffersize
+// Anyway you can set individual file limits in your frontend app functions
+
 config.server = {
   PORT: 3000, // Change to your needs, but:
   // VERY IMPORTANT - PLEASE GET SURE THE PORT HERE IS THE SAME THAN THE PORT AT

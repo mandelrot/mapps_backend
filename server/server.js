@@ -10,7 +10,8 @@ const express = require('express'),
       http = require('http'),
       server = http.createServer(app),
       { Server } = require('socket.io'),
-      io = new Server(server);
+      // io = new Server(server, {maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Production
+      io = new Server(server, {cors: {origin: '*'}, maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Development
 
 // VERY important: if an express app gets a request with a json-type header but a
 // non-json body, depending on the request the app can crash. The next line prevents it:
@@ -88,29 +89,48 @@ app.get('/msgFromServer', (req, res) => {
 
 
 app.get('/:appFolder', async (req, res)=> {
-  const appChecked = await control.checkApp(req.params.appFolder);
+  let parsed = await control.parseRequest(req.headers.host, req.headers.referer, req.params.appFolder);
+  if (!parsed) { 
+    parsed = {
+      appFolder: req.params.appFolder
+    }
+  }
+  const appChecked = await control.checkApp(parsed.appFolder);
   if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
   if (appChecked.result) {
-    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', 'index.html'));
+    const url = req.url.endsWith('/') ? req.url.substring(0, (req.url.length -1)) : req.url;
+    if (url.endsWith(parsed.appFolder)) {
+      return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, parsed.appFolder, 'app', 'index.html'));
+    } else {
+      return res.redirect(`/${parsed.appFolder}/${parsed.params}`);
+    }
   }
   res.redirect('/404');
 })
 
 app.get('/:appFolder/*', async (req, res) => {
-  const appChecked = await control.checkApp(req.params.appFolder);
+  let parsed = await control.parseRequest(req.headers.host, req.headers.referer, req.params.appFolder, req.params['0']);
+  if (!parsed) {
+    parsed = {
+      appFolder: req.params.appFolder,
+      params: req.params['0']
+    }
+  }
+  const appChecked = await control.checkApp(parsed.appFolder);
   if (appChecked.msgError) { return res.redirect(`/msgFromServer?msg=${appChecked.msgError}`); }
-  if (!appChecked.result && !(req.params['0'].includes('backend-static'))) {
+  if (!appChecked.result && !(parsed.params.includes('backend-static'))) {
     return res.redirect('/404');
   }
-  if (req.params['0'].includes('..')) { // In case someone wants to get out of the app folder scope
+  if (parsed.params.includes('..')) { // In case someone wants to get out of the app folder scope
     return res.redirect('/404');
   }
-  if (appChecked.result === 'managedByFrontendApp' && !(req.params['0'].includes('static'))) {
-    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', 'index.html'));
+  if (appChecked.result === 'managedByFrontendApp' && (parsed.params.includes('p__'))) {
+    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, parsed.appFolder, 'app', 'index.html'));
   }
-  const fileExists = await control.checkAppFile ([req.params.appFolder, 'app'].concat(req.params['0'].split('/')));
+  const fileExists = await control.checkAppFile ([parsed.appFolder, 'app'].concat(parsed.params.split('/')));
   if (fileExists) {
-    return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, req.params.appFolder, 'app', ...req.params['0'].split('/')));
+    const finalFile = path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, parsed.appFolder, 'app', ...parsed.params.split('/'));
+    return res.sendFile(finalFile);
   } else {
     return res.redirect('/404');
   }
