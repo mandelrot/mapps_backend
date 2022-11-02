@@ -15,6 +15,7 @@ function setBackendInfo () {
 
   backendInfo = {
     socketPort: config.server.port,
+    msgMaxSize: config.msgMaxSize, // If you want to tell your users when uploading something
     modules: {
       // Node packages present in package.json
       PouchDB: require('pouchdb-node'), // In-file database
@@ -182,8 +183,7 @@ control.msgFromApp = async (incomingMessage) => {
       checkIdFunctionResponse = await idControlFunctionFile.checkId(message.data.token);
       if (!checkIdFunctionResponse) { return { idControlFailed: true }; }
     }
-    let messageParams = JSON.parse(JSON.stringify(message.data.params));
-    messageParams = messageParams.map( param => param === 'idFromToken' ? checkIdFunctionResponse : param );
+    let messageParams = message.data.params.map( param => param === 'idFromToken' ? checkIdFunctionResponse : param );
     // Finding the right file to require, it should contain the specified function
     const file = message.app === message.to ? 'internal.js' : 'external.js';
     const functions = require(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, message.to, 'backend', 'functions', file));
@@ -267,7 +267,7 @@ control.msgToBroadcast = (incomingMessage) => {
 
 
 
-/* CHECKING FUNCTIONS */
+/* UTILITY FUNCTIONS */
 control.checkApp = async (appFolder) => {
   return await backend.checkAppInAppsState(appFolder);
 }
@@ -279,7 +279,41 @@ control.checkAppFile = async (routeArray) => {
 control.isAppEnabled = async(appFolder) => {
   return await backend.isAppEnabled(appFolder);
 }
-/* END OF CHECKING FUNCTIONS */
+
+control.parseRequest = async(host, referer, appFolder, params) => { 
+  // (v4) includes app name in links when needed
+  // Or if something happens and the data can't be managed then returns false
+  try {
+    const responseObj = {};
+
+    const appsFullData = await backend.getAllAppsList();
+    const appNames = appsFullData.result.map( app => app.appFolder );
+
+    
+    if (appNames.includes(appFolder)) { return false; } // Nothing to change then
+
+    const hostInRefererPosition = referer.indexOf(host);
+    if (hostInRefererPosition < 0 ) { return false; }
+    const hostLength = host.length;
+    const stringToCheck = referer.substring(hostInRefererPosition + hostLength + 1);
+    for (const appName of appNames) {
+      if (stringToCheck.startsWith(appName)) { responseObj.appFolder = appName; }
+    }
+    if (!responseObj.appFolder) { return false; }
+
+    let appFolderParsed = appFolder;
+    if (appFolderParsed.endsWith('/')) { appFolderParsed = appFolderParsed.substring(0, (appFolderParsed.length -1)) }
+    let paramsParsed = params ? params : '';
+    if (paramsParsed.startsWith('/')) { paramsParsed = paramsParsed.substring(1); }
+    responseObj.params = appFolderParsed + (params ? '/' + paramsParsed : '');
+    if (responseObj.params.startsWith('/')) { responseObj.params = responseObj.params.substring(1); }
+
+    return responseObj;
+  } catch (error) {
+    return false;
+  }
+}
+/* END OF UTILITY FUNCTIONS */
 
 
 

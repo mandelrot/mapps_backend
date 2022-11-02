@@ -60,3 +60,21 @@ function send() {
   }
 
 }
+
+
+function getFilesMaxSize() {
+
+  const message = {
+    app: 'using-modules',
+    to: 'msgmaxsize.js',
+    action: 'getMsgMaxSize',
+    data: {
+      params: []
+    }
+  }
+  socket.emit('utils', message, (response) => {
+    document.getElementById('warning').innerHTML = `<u>Please notice:</u> your upload to the backend (in total, meaning text + files) must be smaller than <b>${response} Mb</b>, or your message will be simply ignored. More info in the backend config files, where the sysadmin can change this value.`
+  });
+
+}
+getFilesMaxSize();
