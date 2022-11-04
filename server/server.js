@@ -10,8 +10,8 @@ const express = require('express'),
       http = require('http'),
       server = http.createServer(app),
       { Server } = require('socket.io'),
-      // io = new Server(server, {maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Production
-      io = new Server(server, {cors: {origin: '*'}, maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Development
+      io = new Server(server, {maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Production
+      // io = new Server(server, {cors: {origin: '*'}, maxHttpBufferSize: ((config.msgMaxSize * 1048576) || 1048576)}); // Development
 
 // VERY important: if an express app gets a request with a json-type header but a
 // non-json body, depending on the request the app can crash. The next line prevents it:
