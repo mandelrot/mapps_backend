@@ -124,7 +124,7 @@ app.get('/:appFolder/*', async (req, res) => {
   if (parsed.params.includes('..')) { // In case someone wants to get out of the app folder scope
     return res.redirect('/404');
   }
-  if (appChecked.result === 'managedByFrontendApp' && (parsed.params.includes('p__'))) {
+  if (appChecked.result === 'managedByFrontendApp' && (parsed.params.includes('__'))) {
     return res.sendFile(path.join(__dirname, '..', ...config.locations.appsFolderRouteFromMainDirectory, parsed.appFolder, 'app', 'index.html'));
   }
   const fileExists = await control.checkAppFile ([parsed.appFolder, 'app'].concat(parsed.params.split('/')));
