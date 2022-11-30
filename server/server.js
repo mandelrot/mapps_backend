@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
   });
   socket.on('msgToBroadcast', (message) => {
     const messageToBroadcast = control.msgToBroadcast(message);
-    if (messageToBroadcast.msgOk) { // Otherwise ignored
+    if (messageToBroadcast && messageToBroadcast.msgOk) { // Otherwise ignored
       const stringified = JSON.stringify(messageToBroadcast.msgOk);
       io.emit('broadcast', stringified);
     }
