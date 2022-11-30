@@ -71,8 +71,8 @@ The software has a ton of functionalities, utilities and details specially conce
 
 You have all the guides [in the DOCS folder](https://github.com/mandelrot/mapps_backend/tree/master/DOCS) of the code at the top of this page. Also, if you want to test a demo package with some basic apps just to show you how it works, you can download one of the two available versions of it: 
 
-Linux: [https://mega.nz/file/OHZQxbzQ#9U-vUQKc36TPatS_rUwDBA_qxeJQcwQv8pSGzP-_k2Q](https://mega.nz/file/OHZQxbzQ#9U-vUQKc36TPatS_rUwDBA_qxeJQcwQv8pSGzP-_k2Q)<br>
-Windows: [https://mega.nz/file/eGZFBAaC#5OwX7aHfMkB8xPfoybOBYsdiMQR1BJBYvKw_uXkgcto](https://mega.nz/file/eGZFBAaC#5OwX7aHfMkB8xPfoybOBYsdiMQR1BJBYvKw_uXkgcto)
+Linux: [https://mega.nz/file/iTQGFRzS#jnjC0ti1Cgf2BKqZAt6KOg_nTYnV20uesloZI-LlEjQ](https://mega.nz/file/iTQGFRzS#jnjC0ti1Cgf2BKqZAt6KOg_nTYnV20uesloZI-LlEjQ)<br>
+Windows: [https://mega.nz/file/qWQVRArY#zivY78v0Zj0jduYTU43lzGPopeUXxbq7QgJN5PJz0LY](https://mega.nz/file/qWQVRArY#zivY78v0Zj0jduYTU43lzGPopeUXxbq7QgJN5PJz0LY)
 
 IMPORTANT: these packages are just for demo purposes and THEY ARE NOT SECURED FOR PRODUCTION. If you want to use this software in a real corporate environment you should follow the sysadmin guide steps and generate your own custom package with your own settings and passwords. In any case, by using any of my code or software you do it fully under your own responsibility.
 
