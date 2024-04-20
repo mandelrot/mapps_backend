@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/mandelrot/mapps_backend#readme",
   "dependencies": {
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "directory-tree": "^3.3.0",
     "express": "^4.18.1",
     "fs-extra": "^10.1.0",
